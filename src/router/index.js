@@ -3,7 +3,6 @@ import { createRouter,createWebHashHistory } from 'vue-router'
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 import Home from '../views/Home.vue'
-import About from '../views/About.vue'
 import NotFound from '../views/NotFound.vue'
 
 // 2. 定义一些路由
@@ -11,7 +10,6 @@ import NotFound from '../views/NotFound.vue'
 // 我们后面再讨论嵌套路由。
 const routes = [
   { path: '/', component: Home },
-  { path: '/about', component: About },
   {path: '/:pathMatch(.*)',component: NotFound}
 ]
 
