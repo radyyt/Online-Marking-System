@@ -5,12 +5,13 @@ import { createStore } from 'vuex'
 const store = createStore({
   state () {
     return {
-      count: 0
+      //0--未登录、1--已登录
+      isLogin: 0
     }
   },
   mutations: {
-    increment (state) {
-      state.count++
+    login (state) {
+      state.isLogin = 1
     }
   }
 })
