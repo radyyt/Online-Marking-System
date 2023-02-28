@@ -6,8 +6,8 @@ import CommonAside from './components/CommonAside.vue';
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px">
-        <CommonAside />
+      <el-aside width="200px" class="common-aside">
+          <CommonAside />
       </el-aside>
       <el-container>
         <el-header>
@@ -21,4 +21,9 @@ import CommonAside from './components/CommonAside.vue';
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.common-aside{
+  width: 200px;
+  background-color: #424243;
+}
+</style>
