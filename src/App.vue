@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -15,7 +14,7 @@ const router = useRouter()
 const store = useStore()
 
 router.beforeEach((to, from, next) => {
-  console.log('checking...')
+  console.log(store.state.isLogin)
   if (to.path == '/login') {
     next()
   } else {
