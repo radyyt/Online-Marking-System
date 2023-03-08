@@ -10,7 +10,7 @@ import CommonAside from './components/CommonAside.vue';
           <CommonAside />
       </el-aside>
       <el-container>
-        <el-header>
+        <el-header class="common-header">
           <CommonHeader />
         </el-header>
         <el-main>
@@ -26,5 +26,9 @@ import CommonAside from './components/CommonAside.vue';
   width: 200px;
   height: 100vh;
   background-color: #545c64;
+}
+
+.common-header{
+  border-bottom: 1px solid #e9e9e9;
 }
 </style>

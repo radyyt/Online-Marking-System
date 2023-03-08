@@ -1,13 +1,13 @@
 <template>
-    <div class="common-header">
+    <div class="header">
         <div class="left">
-            <span>{{state.name}}</span>
+            <span class="page-title">{{ state.page_name }}</span>
         </div>
-        <div class="Right">
+        <div class="right">
             <el-dropdown>
                 <span class="el-dropdown-link">
-                    User Name
-                    <el-icon>
+                    {{state.user_name}}
+                    <el-icon style="margin-left: 7px;">
                         <arrow-down />
                     </el-icon>
                 </span>
@@ -26,39 +26,55 @@
 </template>
 
 <script setup>
-import {pathMap} from '../utils'
-import {useRouter} from 'vue-router'
+import { pathMap } from '../utils'
+import { useRouter } from 'vue-router'
 import { reactive } from 'vue';
 
 const state = reactive({
-    name: ''
+    user_name: '用户',
+    page_name: ''
 })
 
 const router = useRouter()
-router.afterEach((to)=>{
-    state.name = pathMap[to.name]
-    console.log('to.name',to.name)
+router.afterEach((to) => {
+    state.page_name = pathMap[to.name]
+    console.log('to.name', to.name)
 
 })
 
 </script>
 
 <style scoped>
-.common-header {
+.header {
     display: flex;
     justify-content: space-between;
     height: 60px;
     align-items: center;
-    border-bottom: 1px solid #4C4D4F;
+    /* border-bottom: 1px solid #4C4D4F; */
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .el-dropdown-link {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+    cursor: pointer;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.el-dropdown-link:focus{
+
+.el-dropdown-link:focus {
     /* 用于覆盖浏览器的用户代理样式表 */
     outline: none;
+}
+
+.page-title {
+    font-weight: bold;
+    font-size: 23px;
+    letter-spacing: 1px;
 }
 </style>

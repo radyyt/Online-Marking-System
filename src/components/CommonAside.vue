@@ -1,14 +1,20 @@
 <template>
     <div>
         <div class="logo">
-            <el-icon size="35" color="#E5EAF3">
+            <el-icon size="30px" color="#E5EAF3">
                 <Document />
             </el-icon>
             <span id="title">在线阅卷系统</span>
         </div>
         <div class="menu">
             <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                text-color="#E5EAF3" :router=true>
+                text-color="#E5EAF3" :router=true style="border: 0;">
+                <el-menu-item index="/">
+                    <el-icon>
+                        <House />
+                    </el-icon>
+                    <span class="menu-title">首页</span>
+                </el-menu-item>
                 <el-menu-item index="/questions/input">
                     <el-icon>
                         <DocumentAdd />
@@ -17,7 +23,7 @@
                 </el-menu-item>
                 <el-menu-item index="/questions/manage">
                     <el-icon>
-                        <DocumentAdd />
+                        <Setting />
                     </el-icon>
                     <span class="menu-title">题库管理</span>
                 </el-menu-item>
@@ -40,9 +46,7 @@
                     <span class="menu-title">成绩管理</span>
                 </el-menu-item>
                 <el-menu-item index="/score/analysis">
-                    <el-icon>
-                        <DocumentAdd />
-                    </el-icon>
+                    <el-icon><DataAnalysis /></el-icon>
                     <span class="menu-title">成绩分析</span>
                 </el-menu-item>
                 <!-- <el-sub-menu index="2">
@@ -100,10 +104,11 @@ const itemClick = (item) => {
     align-items: center;
     margin-top: 15px;
     margin-bottom: 20px;
+    padding-left: 10px;
 }
 
 #title {
-    font-size: 25px;
+    font-size: 23px;
     font-weight: bold;
     margin-left: 5px;
     color: #E5EAF3;
