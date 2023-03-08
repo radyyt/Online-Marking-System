@@ -27,7 +27,7 @@
                             <el-input v-model="form.password" />
                         </el-form-item>
                         <el-form-item class="button-item">
-                            <el-button type=primary @click="onSubmit">立即登录</el-button>
+                            <el-button type=primary @click="onSubmit" size="large">立即登录</el-button>
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
@@ -39,26 +39,19 @@
 <script setup>
 import { reactive } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const store = useStore()
 const router = useRouter()
 const form = reactive({
     username: '',
     password: '',
-    check: function () {
-        if (form.username != '' && form.password != '') return true;
-        else return false
-    }
 })
 
 const onSubmit = () => {
     console.log('submit')
-    if (form.check()) {
-        store.commit('login')
-        console.log(store.state.isLogin)
-        router.push('/home')
-    }
+    // 对接后台登录模块
 }
 
 </script>
@@ -73,7 +66,7 @@ const onSubmit = () => {
 }
 
 .login-container {
-    width: 400px;
+    width: 350px;
     height: 350px;
     background-color: #fff;
     border-radius: 4px;
@@ -96,6 +89,6 @@ const onSubmit = () => {
 }
 
 .button-item {
-    padding-left: 270px;
+    padding-left: 220px;
 }
 </style>
