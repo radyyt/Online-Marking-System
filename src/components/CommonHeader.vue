@@ -1,7 +1,7 @@
 <template>
     <div class="common-header">
         <div class="left">
-            <span>此处放置当前页面标题</span>
+            <span>{{state.name}}</span>
         </div>
         <div class="Right">
             <el-dropdown>
@@ -24,6 +24,24 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import {pathMap} from '../utils'
+import {useRouter} from 'vue-router'
+import { reactive } from 'vue';
+
+const state = reactive({
+    name: ''
+})
+
+const router = useRouter()
+router.afterEach((to)=>{
+    state.name = pathMap[to.name]
+    console.log('to.name',to.name)
+
+})
+
+</script>
 
 <style scoped>
 .common-header {

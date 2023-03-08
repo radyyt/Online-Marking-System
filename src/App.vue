@@ -14,7 +14,7 @@ import CommonAside from './components/CommonAside.vue';
           <CommonHeader />
         </el-header>
         <el-main>
-          main
+          <RouterView></RouterView>
         </el-main>
       </el-container>
     </el-container>
@@ -24,6 +24,7 @@ import CommonAside from './components/CommonAside.vue';
 <style scoped>
 .common-aside{
   width: 200px;
-  background-color: #424243;
+  height: 100vh;
+  background-color: #545c64;
 }
 </style>

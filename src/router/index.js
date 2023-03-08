@@ -1,17 +1,16 @@
-import { createRouter,createWebHashHistory } from 'vue-router'
-
-import Home from '../views/Home.vue'
-import NotFound from '../views/NotFound.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
-  { path: '/', component: Home },
-  {path: '/:pathMatch(.*)',component: NotFound}
+  { path: '/', name: 'home', component: ()=>import('../views/Home.vue') },
+  { path: '/questions/input', name: 'questionsInput', component: ()=>import('../views/Questions.vue') },
+  { path: '/questions/manage', name: 'questionsManage', component:()=>import('../views/QuestionsManage.vue') },
+  { path: '/:pathMatch(.*)', component: ()=>import('../views/NotFound.vue') }
 ]
 
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes, 
+  routes,
 })
 
 export default router
