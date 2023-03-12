@@ -14,16 +14,18 @@ const router = useRouter()
 const store = useStore()
 
 router.beforeEach((to, from, next) => {
-  console.log(store.state.isLogin)
-  if (to.path == '/login') {
-    next()
-  } else {
-    if (store.state.isLogin == 1) {
-      next()
-    } else {
-      next({ path: '/login' })
-    }
-  }
+  // console.log(store.state.isLogin)
+  // if (to.path == '/login') {
+  //   next()
+  // } else {
+  //   if (store.state.isLogin == 1) {
+  //     next()
+  //   } else {
+  //     next({ path: '/login' })
+  //   }
+  // }
+  const storage = localStorage
+  
 })
 </script>
 

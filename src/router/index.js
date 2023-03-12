@@ -6,7 +6,7 @@ import Login from '../views/Login.vue'
 
 const routes = [
   { path: '/home', component: Home },
-  { path: '/login', component: Login},
+  { path: '/login', component: Login },
   { path: '/:pathMatch(.*)', component: NotFound }
 ]
 

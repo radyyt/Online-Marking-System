@@ -4,55 +4,80 @@
             <div class="head">
                 <span id="title">在线阅卷系统</span>
             </div>
-            <el-tabs type="border-card" stretch>
-                <el-tab-pane label="学生登录">
-                    <el-form label-position="top" :model="form">
-                        <el-form-item label="账号">
-                            <el-input v-model="form.username" />
-                        </el-form-item>
-                        <el-form-item label="密码">
-                            <el-input v-model="form.password" />
-                        </el-form-item>
-                        <el-form-item class="button-item">
-                            <el-button type=primary @click="onSubmit">立即登录</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-tab-pane>
-                <el-tab-pane label="教师登录">
-                    <el-form label-position="top" :model="form">
-                        <el-form-item label="账号">
-                            <el-input v-model="form.username" />
-                        </el-form-item>
-                        <el-form-item label="密码">
-                            <el-input v-model="form.password" />
-                        </el-form-item>
-                        <el-form-item class="button-item">
-                            <el-button type=primary @click="onSubmit" size="large">立即登录</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-tab-pane>
-            </el-tabs>
+            <el-form label-position="top" :model="state.form" :rules="state.rules" class="form" ref="loginForm">
+                <el-form-item label="账号" prop="username">
+                    <el-input v-model="state.form.username" />
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input v-model="state.form.password" />
+                </el-form-item>
+                <el-form-item class="button-item">
+                    <el-button type=primary @click="onSubmit" size="large">立即登录</el-button>
+                </el-form-item>
+            </el-form>
         </div>
     </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import axios from '../utils/axios';
 
 const store = useStore()
 const router = useRouter()
-const form = reactive({
-    username: '',
-    password: '',
+const loginForm = ref(null)
+const state = reactive({
+    form: {
+        username: '',
+        password: ''
+    },
+    //表单验证规则
+    rules: {
+        username: [
+            { required: true, message: "请输入用户名", trigger: blur }
+        ],
+        password: [
+            { required: true, message: "请输入密码", trigger: blur }
+        ]
+    }
 })
+
 
 const onSubmit = () => {
     console.log('submit')
-    // 对接后台登录模块
+
+    // loginForm.value.validate((valid) => {
+    //     if (valid) {
+    //         axios.post('token/', {
+    //             userame: state.form.username,
+    //             password: state.form.password
+    //         }).then(res => {
+    //             console.log(res)
+    //         })
+    //     } else {
+    //         console.log('error submit!!')
+    //         return false;
+    //     }
+    // })
+
+    axios.post('token/', {
+                username: state.form.username,
+                password: state.form.password
+            }).then(res => {
+                console.log(res)
+                const storage = localStorage
+                const expiredTime = Date.parse(res.headers.date) + 300000
+                storage.setItem('access_token',res.data.access)
+                storage.setItem('refresh_token',res.data.refresh)
+                storage.setItem('expired_time',expiredTime)
+
+                //登录成功后跳转到首页
+                router.push({path: '/home'})
+            })
 }
+
 
 </script>
 
@@ -89,6 +114,12 @@ const onSubmit = () => {
 }
 
 .button-item {
-    padding-left: 220px;
+    padding-top: 20px;
+    padding-left: 200px;
+}
+
+.form {
+    width: 300px;
+    margin-left: 23px;
 }
 </style>
