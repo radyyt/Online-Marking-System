@@ -9,7 +9,7 @@
                     <el-input v-model="state.form.username" />
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="state.form.password" />
+                    <el-input v-model="state.form.password" type="password"/>
                 </el-form-item>
                 <el-form-item class="button-item">
                     <el-button type=primary @click="onSubmit" size="large">立即登录</el-button>
@@ -67,11 +67,10 @@ const onSubmit = () => {
                 password: state.form.password
             }).then(res => {
                 console.log(res)
-                const storage = localStorage
-                const expiredTime = Date.parse(res.headers.date) + 300000
-                storage.setItem('access_token',res.data.access)
-                storage.setItem('refresh_token',res.data.refresh)
-                storage.setItem('expired_time',expiredTime)
+                const expiredTime = Date.parse(res.headers.date) + 1800000
+                localStorage.setItem('access_token',res.data.access)
+                localStorage.setItem('refresh_token',res.data.refresh)
+                localStorage.setItem('expired_time',expiredTime)
 
                 //登录成功后跳转到首页
                 router.push({path: '/home'})
