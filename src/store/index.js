@@ -5,13 +5,15 @@ import { createStore } from 'vuex'
 const store = createStore({
   state () {
     return {
-      //0--未登录、1--已登录
-      isLogin: 0
+      showMenu: false
     }
   },
   mutations: {
-    login (state) {
-      state.isLogin = 1
+    isMenu(state){
+      state.showMenu = true
+    },
+    noMenu(state){
+      state.showMenu = false
     }
   }
 })

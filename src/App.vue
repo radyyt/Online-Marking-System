@@ -1,8 +1,8 @@
 <template>
   <div class="common-layout">
-    <el-container>
+    <el-container v-if="showMenu">
       <el-aside width="200px" class="common-aside">
-          <CommonAside />
+        <CommonAside />
       </el-aside>
       <el-container>
         <el-header class="common-header">
@@ -13,66 +13,74 @@
         </el-main>
       </el-container>
     </el-container>
+    <el-container v-else>
+      <RouterView></RouterView>
+    </el-container>
   </div>
 </template>
 
 <script setup>
+import CommonHeader from './components/CommonHeader.vue';
+import CommonAside from './components/CommonAside.vue';
+import { computed } from 'vue'
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 const router = useRouter()
 const store = useStore()
+const showMenu = computed(() => store.state.showMenu)
+const isMenu = () => store.commit('isMenu')
+const noMenu = () => store.commit('noMenu')
 
-//用于检测用户是否登录
-router.beforeEach((to, from, next) => {
-  console.log("beforeEach")
-  const refresh_token = localStorage.getItem('refresh_token')
-  const expired_time = localStorage.getItem('expired_time')
-  const current = Date.parse(new Date().getTime)
+  //用于检测用户是否登录
+  router.beforeEach((to, from, next) => {
+    console.log(showMenu.value)
+    const access_token = localStorage.getItem('access_token')
+    const refresh_token = localStorage.getItem('refresh_token')
+    const current = Date.parse(new Date().getTime)
+    console.log(current)
 
-  //如果token未过期
-  if (to.next = '/login') {
-    next()
-  } else {
-    if (expired_time > current) {
+    if (to.path  == '/login') {
+      noMenu()
       next()
-    } else if (refresh_token) {
-      axios.post('token/refresh/', {
-        refresh: refresh_token,
-      }).then(res => {
-        const next_expired_time = Date.parse(res.headers.date) + 1800000
-        localStorage.setItem('access_token', res.data.access)
-        localStorage.setItem('expired_time', next_expired_time)
-        localStorage.removeItem('refresh_token')
-      }).catch(() => {
-        localStorage.clear()
-      })
     } else {
-      localStorage.clear()
-      console.log('no token')
-      next({ path: '/login' })
+      //如果token存在
+      if (access_token) {
+        console.log(123)
+        isMenu()
+        next()
+      } else if (refresh_token) {
+        axios.post('token/refresh/', {
+          refresh: refresh_token,
+        }).then(res => {
+          localStorage.setItem('access_token', res.data.access)
+          localStorage.removeItem('refresh_token')
+        }).catch(() => {
+          localStorage.clear()
+        })
+      } else {
+        localStorage.clear()
+        console.log('no token')
+        noMenu()
+        next({ path: '/login' })
+      }
     }
-  }
-})
+  })
 </script>
 
 <style scoped>
-.layout {
+.common-layout {
   min-height: 100vh;
 }
 
-.container {
-  height: 100vh;
-}
-
-.common-aside{
+.common-aside {
   width: 200px;
   height: 100vh;
   background-color: #545c64;
 }
 
-.common-header{
+.common-header {
   border-bottom: 1px solid #e9e9e9;
 }
 </style>

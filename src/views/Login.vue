@@ -47,36 +47,18 @@ const state = reactive({
 
 const onSubmit = () => {
     console.log('submit')
-
-    // loginForm.value.validate((valid) => {
-    //     if (valid) {
-    //         axios.post('token/', {
-    //             userame: state.form.username,
-    //             password: state.form.password
-    //         }).then(res => {
-    //             console.log(res)
-    //         })
-    //     } else {
-    //         console.log('error submit!!')
-    //         return false;
-    //     }
-    // })
-
     axios.post('token/', {
                 username: state.form.username,
                 password: state.form.password
             }).then(res => {
                 console.log(res)
-                const expiredTime = Date.parse(res.headers.date) + 1800000
                 localStorage.setItem('access_token',res.data.access)
                 localStorage.setItem('refresh_token',res.data.refresh)
-                localStorage.setItem('expired_time',expiredTime)
 
                 //登录成功后跳转到首页
                 router.push({path: '/home'})
             })
 }
-
 
 </script>
 
@@ -86,6 +68,7 @@ const onSubmit = () => {
     justify-content: center;
     align-items: center;
     width: 100%;
+    height: 100vh;
     background-color: #fff;
 }
 

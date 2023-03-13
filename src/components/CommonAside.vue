@@ -46,7 +46,9 @@
                     <span class="menu-title">成绩管理</span>
                 </el-menu-item>
                 <el-menu-item index="/score/analysis">
-                    <el-icon><DataAnalysis /></el-icon>
+                    <el-icon>
+                        <DataAnalysis />
+                    </el-icon>
                     <span class="menu-title">成绩分析</span>
                 </el-menu-item>
                 <!-- <el-sub-menu index="2">
@@ -117,4 +119,5 @@ const itemClick = (item) => {
 .menu-title {
     padding-left: 10px;
     font-size: 17px;
-}</style>
+}
+</style>
