@@ -4,7 +4,7 @@
             <span class="page-title">{{ state.page_name }}</span>
         </div>
         <div class="right">
-            <el-dropdown>
+            <el-dropdown @command="event">
                 <span class="el-dropdown-link">
                     {{state.user_name}}
                     <el-icon style="margin-left: 7px;">
@@ -13,11 +13,11 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item>个人中心</el-dropdown-item>
+                        <el-dropdown-item command="profile">个人中心</el-dropdown-item>
                         <el-dropdown-item>Action 2</el-dropdown-item>
                         <el-dropdown-item>Action 3</el-dropdown-item>
                         <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                        <el-dropdown-item divided>退出登录</el-dropdown-item>
+                        <el-dropdown-item command="quit" divided>退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -30,17 +30,26 @@ import { pathMap } from '../utils'
 import { useRouter } from 'vue-router'
 import { reactive } from 'vue';
 
+const router = useRouter()
 const state = reactive({
     user_name: '用户',
     page_name: ''
 })
 
-const router = useRouter()
 router.afterEach((to) => {
     state.page_name = pathMap[to.name]
     console.log('to.name', to.name)
 
 })
+
+//下拉菜单的触发事件
+const event = (command) => {
+    console.log(command)
+    if(command=="quit"){
+        localStorage.clear()
+        router.push({path: '/login'})
+    }
+}
 
 </script>
 

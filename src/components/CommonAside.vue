@@ -9,7 +9,7 @@
         <div class="menu">
             <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
                 text-color="#E5EAF3" :router=true style="border: 0;">
-                <el-menu-item index="/">
+                <el-menu-item index="/home">
                     <el-icon>
                         <House />
                     </el-icon>

@@ -38,8 +38,6 @@ const noMenu = () => store.commit('noMenu')
     console.log(showMenu.value)
     const access_token = localStorage.getItem('access_token')
     const refresh_token = localStorage.getItem('refresh_token')
-    const current = Date.parse(new Date().getTime)
-    console.log(current)
 
     if (to.path  == '/login') {
       noMenu()
@@ -47,7 +45,6 @@ const noMenu = () => store.commit('noMenu')
     } else {
       //如果token存在
       if (access_token) {
-        console.log(123)
         isMenu()
         next()
       } else if (refresh_token) {
