@@ -1,14 +1,14 @@
 <template>
     <div class="header">
         <div class="left">
-            <span class="page-title">{{ state.page_name }}</span>
+            <span class="page-title">{{ state.pageName }}</span>
         </div>
         <div class="right">
             <el-dropdown @command="event">
                 <span class="el-dropdown-link">
-                    {{state.user_name}}
-                    <el-icon style="margin-left: 7px;">
-                        <arrow-down />
+                    {{ username }}
+                    <el-icon style="margin-left: 5px;">
+                        <CaretBottom />
                     </el-icon>
                 </span>
                 <template #dropdown>
@@ -26,28 +26,32 @@
 </template>
 
 <script setup>
-import { pathMap } from '../utils'
-import { useRouter } from 'vue-router'
+import { pathMap } from '../utils';
+import { useRouter } from 'vue-router';
 import { reactive } from 'vue';
+import { useStore } from 'vuex';
+import { computed } from 'vue'
 
 const router = useRouter()
+const store = useStore()
+
+const username = computed(() => { return store.state.username })
 const state = reactive({
-    user_name: '用户',
-    page_name: ''
+    // user_name: '用户',
+    pageName: ''
 })
 
 router.afterEach((to) => {
     state.page_name = pathMap[to.name]
     console.log('to.name', to.name)
-
 })
 
 //下拉菜单的触发事件
 const event = (command) => {
     console.log(command)
-    if(command=="quit"){
+    if (command == "quit") {
         localStorage.clear()
-        router.push({path: '/login'})
+        router.push({ path: '/login' })
     }
 }
 

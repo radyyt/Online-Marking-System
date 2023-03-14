@@ -9,7 +9,7 @@
                     <el-input v-model="state.form.username" />
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="state.form.password" type="password"/>
+                    <el-input v-model="state.form.password" type="password" />
                 </el-form-item>
                 <el-form-item class="button-item">
                     <el-button type=primary @click="onSubmit" size="large">立即登录</el-button>
@@ -26,7 +26,10 @@ import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 
 const store = useStore()
+const saveUsername = (value) => store.commit('saveUsername',{name: value})
+
 const router = useRouter()
+
 const loginForm = ref(null)
 const state = reactive({
     form: {
@@ -48,16 +51,17 @@ const state = reactive({
 const onSubmit = () => {
     console.log('submit')
     axios.post('token/', {
-                username: state.form.username,
-                password: state.form.password
-            }).then(res => {
-                console.log(res)
-                localStorage.setItem('access_token',res.data.access)
-                localStorage.setItem('refresh_token',res.data.refresh)
+        username: state.form.username,
+        password: state.form.password
+    }).then(res => {
+        console.log(res)
+        localStorage.setItem('access_token', res.data.access)
+        localStorage.setItem('refresh_token', res.data.refresh)
 
-                //登录成功后跳转到首页
-                router.push({path: '/home'})
-            })
+        saveUsername(state.form.username)
+        //登录成功后跳转到首页
+        router.push({ path: '/home' })
+    })
 }
 
 </script>
@@ -69,7 +73,8 @@ const onSubmit = () => {
     align-items: center;
     width: 100%;
     height: 100vh;
-    background-color: #fff;
+    background: url("../assets/login_background.jpg");
+    background-size: 100% 100%;
 }
 
 .login-container {
