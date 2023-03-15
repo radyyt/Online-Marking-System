@@ -15,7 +15,7 @@
                     </el-icon>
                     <span class="menu-title">首页</span>
                 </el-menu-item>
-                <el-menu-item index="/questions/manage">
+                <el-menu-item index="/questions/input">
                     <el-icon>
                         <DocumentAdd />
                     </el-icon>

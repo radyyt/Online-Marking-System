@@ -2,5 +2,5 @@
 export const pathMap = {
     home: '首页',
     singleChoice: '单项选择',
-    questionsManage: '题库管理',
+    questionsInput: '题库录入',
 }

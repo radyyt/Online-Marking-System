@@ -42,7 +42,7 @@ const state = reactive({
 })
 
 router.afterEach((to) => {
-    state.page_name = pathMap[to.name]
+    state.pageName = pathMap[to.name]
     console.log('to.name', to.name)
 })
 
