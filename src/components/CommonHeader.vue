@@ -43,7 +43,6 @@ const state = reactive({
 
 router.afterEach((to) => {
     state.pageName = pathMap[to.name]
-    console.log('to.name', to.name)
 })
 
 //下拉菜单的触发事件

@@ -2,7 +2,7 @@
     <div class="container">
         <div class="box">
             <h1 id="info">404 Not found!</h1>
-            <RouterLink to="/">
+            <RouterLink to="/home">
                 <el-button class="button">返回首页</el-button>
             </RouterLink>
         </div>

@@ -35,7 +35,6 @@ const noMenu = () => store.commit('noMenu')
 
   //用于检测用户是否登录
   router.beforeEach((to, from, next) => {
-    console.log(showMenu.value)
     const access_token = localStorage.getItem('access_token')
     const refresh_token = localStorage.getItem('refresh_token')
 
