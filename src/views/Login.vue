@@ -26,7 +26,7 @@ import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 
 const store = useStore()
-const saveUsername = (value) => store.commit('saveUsername',{name: value})
+const saveUsername = (value) => store.commit('saveUsername', { name: value })
 
 const router = useRouter()
 

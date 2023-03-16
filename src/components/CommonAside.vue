@@ -7,7 +7,7 @@
             <span id="title">在线阅卷系统</span>
         </div>
         <div class="menu">
-            <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
+            <el-menu active-text-color="#79bbff" background-color="#545c64" class="el-menu-vertical-demo"
                 text-color="#E5EAF3" :router=true style="border: 0;">
                 <el-menu-item index="/home">
                     <el-icon>
@@ -24,9 +24,9 @@
                 <el-sub-menu index="1">
                     <template #title>
                         <el-icon>
-                            <Setting />
+                            <DocumentChecked />
                         </el-icon>
-                        <span class="menu-title">题库管理</span>
+                        <span class="menu-title">题目选择</span>
                     </template>
                     <el-menu-item-group title="客观题">
                         <el-menu-item index="/questions/single-choice">单项选择</el-menu-item>
@@ -42,7 +42,7 @@
                 </el-sub-menu>
                 <el-menu-item index="/papers/publish">
                     <el-icon>
-                        <DocumentAdd />
+                        <Printer />
                     </el-icon>
                     <span class="menu-title">试卷发布</span>
                 </el-menu-item>

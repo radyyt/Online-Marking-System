@@ -6,7 +6,9 @@ const store = createStore({
   state() {
     return {
       username: '',
-      showMenu: false
+      showMenu: false,
+      //储存已选择的单选题
+      singleChoices: [],
     }
   },
   mutations: {
@@ -16,10 +18,20 @@ const store = createStore({
     noMenu(state) {
       state.showMenu = false
     },
-    saveUsername(state,payload){
+    saveUsername(state, payload) {
       console.log(payload.name)
       state.username = payload.name
+    },
+    saveSingleChoices(state, payload) {
+      state.singleChoices = payload
+      console.log(state.singleChoices)
     }
+  },
+  actions: {
+    saveSingleChoices({commit}, payload) {
+      // console.log('actions')
+      commit('saveSingleChoices', payload);
+    },
   }
 })
 

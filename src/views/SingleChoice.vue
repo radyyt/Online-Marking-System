@@ -37,13 +37,6 @@
                 </el-table-column>
             </el-table>
         </div>
-        <!-- <div class="middle">
-            <el-button type="primary" ac>
-                <el-icon>
-                    <DArrowRight />
-                </el-icon>
-            </el-button>
-        </div> -->
         <div class="right">
             <h3 style="margin-top: 0;">已选择</h3>
             <el-table :data="state.selected">
@@ -70,7 +63,12 @@
 import axios from '../utils/axios';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
+import { useStore } from 'vuex';
+
+const store = useStore()
+//保存选中题目到store
+const saveSingleChoices = (value) =>store.dispatch('saveSingleChoices',value)
 
 const router = useRouter()
 const state = reactive({
@@ -99,8 +97,12 @@ const questionSelect = (question) => {
 }
 
 const submitBtn = () => {
-    ElMessage({ message: '已提交至试卷', type: 'success' })
-    console.log(state.selected)
+    saveSingleChoices(state.selected).then(()=>{
+        ElMessage({ message: '已提交至试卷', type: 'success' })
+    },()=>{
+        ElMessage({ message: '提交至试卷失败', type: 'error' })
+    })
+    // console.log(state.selected)
 }
 
 </script>
