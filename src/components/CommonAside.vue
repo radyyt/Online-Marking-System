@@ -29,11 +29,11 @@
                         <span class="menu-title">题目选择</span>
                     </template>
                     <el-menu-item-group title="客观题">
-                        <el-menu-item index="/questions/single-choice">单项选择</el-menu-item>
-                        <el-menu-item index="1-2">item two</el-menu-item>
+                        <el-menu-item index="/questions/choice">选择题</el-menu-item>
+                        <el-menu-item index="/questions/multiple-choice">填空题</el-menu-item>
                     </el-menu-item-group>
                     <el-menu-item-group title="主观题">
-                        <el-menu-item index="1-3">item three</el-menu-item>
+                        <el-menu-item index="/questions/subjective">主观题</el-menu-item>
                     </el-menu-item-group>
                     <el-sub-menu index="1-4">
                         <template #title>item four</template>
