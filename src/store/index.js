@@ -1,4 +1,3 @@
-import { createApp } from 'vue'
 import { createStore } from 'vuex'
 
 // 创建一个新的 store 实例
@@ -8,7 +7,8 @@ const store = createStore({
       username: '',
       showMenu: false,
       //储存已选择的单选题
-      singleChoices: [],
+      choice: [],
+      subjective: [],
     }
   },
   mutations: {
@@ -22,16 +22,23 @@ const store = createStore({
       console.log(payload.name)
       state.username = payload.name
     },
-    saveSingleChoices(state, payload) {
-      state.singleChoices = payload
-      console.log(state.singleChoices)
-    }
+    saveChoice(state, payload) {
+      state.choice = payload
+      console.log(state.choice)
+    },
+    saveSubjective(state, payload) {
+      state.subjective = payload
+      console.log(state.subjective)
+    },
   },
   actions: {
-    saveSingleChoices({commit}, payload) {
+    saveChoice({ commit }, payload) {
       // console.log('actions')
-      commit('saveSingleChoices', payload);
+      commit('saveChoice', payload)
     },
+    saveSubjective({ commit }, payload) {
+      commit('saveSubjective', payload)
+    }
   }
 })
 
