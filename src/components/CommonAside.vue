@@ -35,10 +35,10 @@
                     <el-menu-item-group title="主观题">
                         <el-menu-item index="/questions/subjective">主观题</el-menu-item>
                     </el-menu-item-group>
-                    <el-sub-menu index="1-4">
+                    <!-- <el-sub-menu index="1-4">
                         <template #title>item four</template>
                         <el-menu-item index="1-4-1">item one</el-menu-item>
-                    </el-sub-menu>
+                    </el-sub-menu> -->
                 </el-sub-menu>
                 <el-menu-item index="/papers/publish">
                     <el-icon>

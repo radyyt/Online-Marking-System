@@ -42,7 +42,9 @@ const noMenu = () => store.commit('noMenu')
       noMenu()
       next()
     } else {
-      //如果token存在
+      // 如果token存在
+      // 将token传回后台验证
+
       if (access_token) {
         isMenu()
         next()
