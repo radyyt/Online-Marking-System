@@ -16,7 +16,14 @@
                         <div class="expand-block">
                             <h4 class="title">题目详情：</h4>
                             <div class="question-zone">
-                                <p style="margin: 0px;"> {{ props.row.body }}</p>
+                                <el-row align="middle">
+                                    <el-col :span="14">
+                                        <p style="margin: 0px;"> {{ props.row.body }}</p>
+                                    </el-col>
+                                    <el-col :span="8" :offset="2">
+                                        <el-image fit="fill" :src=props.row.image />
+                                    </el-col>
+                                </el-row>
                             </div>
                             <h4 class="title">正确答案：</h4>
                             <div class="question-zone">

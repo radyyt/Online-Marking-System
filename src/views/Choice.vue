@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="left">
-            <el-row justify="space-between">
+            <el-row justify="space-between" align="middle">
                 <el-col :span="4">
                     <h3 style="margin-top: 0;">待选择</h3>
                 </el-col>
@@ -16,13 +16,20 @@
                         <div class="expand-block">
                             <h4 class="title">题目详情：</h4>
                             <div class="question-zone">
-                                <p style="margin: 0px;"> {{ props.row.body }}</p>
-                                <div id="choices-zone">
-                                    <span class="choices">A:&nbsp&nbsp{{ props.row.choices_A }}</span>
-                                    <span class="choices">B:&nbsp&nbsp{{ props.row.choices_B }}</span>
-                                    <span class="choices">C:&nbsp&nbsp{{ props.row.choices_C }}</span>
-                                    <span class="choices">D:&nbsp&nbsp{{ props.row.choices_D }}</span>
-                                </div>
+                                <el-row align="middle">
+                                    <el-col :span="18">
+                                        <p style="margin: 0px;"> {{ props.row.body }}</p>
+                                        <div id="choices-zone">
+                                            <span class="choices">A:&nbsp&nbsp{{ props.row.choices_A }}</span>
+                                            <span class="choices">B:&nbsp&nbsp{{ props.row.choices_B }}</span>
+                                            <span class="choices">C:&nbsp&nbsp{{ props.row.choices_C }}</span>
+                                            <span class="choices">D:&nbsp&nbsp{{ props.row.choices_D }}</span>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="4" :offset="2">
+                                        <el-image fit="contain" :src=props.row.image />
+                                    </el-col>
+                                </el-row>
                             </div>
                             <h4 class="title">正确答案：{{ props.row.correct_answer }}</h4>
                         </div>
@@ -198,4 +205,5 @@ const clearFilter = () => {
 .choices {
     margin: 3px;
 }
+
 </style>
