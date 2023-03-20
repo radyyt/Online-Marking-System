@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="left">
-            <el-row justify="space-between" align="middle">
+            <el-row justify="space-between">
                 <el-col :span="4">
                     <h3 style="margin-top: 0;">待选择</h3>
                 </el-col>
@@ -17,21 +17,20 @@
                             <h4 class="title">题目详情：</h4>
                             <div class="question-zone">
                                 <el-row align="middle">
-                                    <el-col :span="18">
+                                    <el-col :span="14">
                                         <p style="margin: 0px;"> {{ props.row.body }}</p>
-                                        <div id="choices-zone">
-                                            <span class="choices">A:&nbsp&nbsp{{ props.row.choices_A }}</span>
-                                            <span class="choices">B:&nbsp&nbsp{{ props.row.choices_B }}</span>
-                                            <span class="choices">C:&nbsp&nbsp{{ props.row.choices_C }}</span>
-                                            <span class="choices">D:&nbsp&nbsp{{ props.row.choices_D }}</span>
-                                        </div>
                                     </el-col>
-                                    <el-col :span="4" :offset="2">
-                                        <el-image fit="contain" :src=props.row.image />
+                                    <el-col :span="8" :offset="2">
+                                        <el-image fit="fill" :src=props.row.image />
                                     </el-col>
                                 </el-row>
                             </div>
-                            <h4 class="title">正确答案：{{ props.row.correct_answer }}</h4>
+                            <h4 class="title">正确答案：</h4>
+                            <div class="question-zone">
+                                <p style="margin: 0px;"> 1. &nbsp&nbsp{{ props.row.correct_answer_1 }}</p>
+                                <p style="margin: 0px;"> 2. &nbsp&nbsp{{ props.row.correct_answer_2 }}</p>
+                                <p style="margin: 0px;"> 3. &nbsp&nbsp{{ props.row.correct_answer_3 }}</p>
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -49,14 +48,6 @@
                         <el-tag>{{ scope.row.subject_name }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="type" label="类型" width="100" :filters="[
-                    { text: '单项选择', value: '单项选择' },
-                    { text: '多项选择', value: '多项选择' },
-                ]" :filter-method="filterType" filter-placement="bottom-end" header-align="center" align="center">
-                    <template #default="scope">
-                        <el-tag>{{ scope.row.type_name }}</el-tag>
-                    </template>
-                </el-table-column>
             </el-table>
         </div>
         <div class="right">
@@ -65,11 +56,6 @@
                 <el-table-column prop="body" label="题目">
                     <template #default="scope">
                         <span class="one-line">{{ scope.row.body }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="type" label="类型" width="100" header-align="center" align="center" sortable>
-                    <template #default="scope">
-                        <el-tag>{{ scope.row.type_name }}</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
@@ -96,7 +82,7 @@ import { useStore } from 'vuex';
 const tableRef = ref()
 const store = useStore()
 //保存选中题目到store
-const saveChoice = (value) => store.dispatch('saveChoice', value)
+const saveSubjective = (value) => store.dispatch('saveSubjective', value)
 
 const router = useRouter()
 const state = reactive({
@@ -104,7 +90,7 @@ const state = reactive({
     selected: [],
 })
 
-axios.get('choice/').then((res) => {
+axios.get('blank/').then((res) => {
     console.log(res)
     state.info = res.data
 })
@@ -120,18 +106,14 @@ const filterSubject = (value, row) => {
     return row.subject_name === value
 }
 
-//类型标签过滤
-const filterType = (value, row) => {
-    return row.type_name === value
-}
-
 //多选事件
 const questionSelect = (question) => {
     state.selected = question
 }
 
+//提交按钮事件
 const submitBtn = () => {
-    saveChoice(state.selected).then(() => {
+    saveSubjective(state.selected).then(() => {
         ElMessage({ message: '已提交至试卷', type: 'success' })
     }, () => {
         ElMessage({ message: '提交至试卷失败', type: 'error' })
@@ -205,5 +187,4 @@ const clearFilter = () => {
 .choices {
     margin: 3px;
 }
-
 </style>

@@ -88,7 +88,7 @@ const state = reactive({
     selected: [],
 })
 
-axios.get('subjective-question/').then((res) => {
+axios.get('subjective/').then((res) => {
     console.log(res)
     state.info = res.data
 })

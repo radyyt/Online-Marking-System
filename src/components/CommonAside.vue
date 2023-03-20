@@ -30,7 +30,7 @@
                     </template>
                     <el-menu-item-group title="客观题">
                         <el-menu-item index="/questions/choice">选择题</el-menu-item>
-                        <el-menu-item index="/questions/multiple-choice">填空题</el-menu-item>
+                        <el-menu-item index="/questions/blank">填空题</el-menu-item>
                     </el-menu-item-group>
                     <el-menu-item-group title="主观题">
                         <el-menu-item index="/questions/subjective">主观题</el-menu-item>
