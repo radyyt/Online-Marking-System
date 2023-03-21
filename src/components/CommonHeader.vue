@@ -35,7 +35,8 @@ import { computed } from 'vue'
 const router = useRouter()
 const store = useStore()
 
-const username = computed(() => { return store.state.username })
+// const username = computed(() => { return store.state.username })
+const username = computed(()=>{ return sessionStorage.getItem('username')})
 const state = reactive({
     // user_name: '用户',
     pageName: ''

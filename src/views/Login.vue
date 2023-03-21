@@ -59,6 +59,7 @@ const onSubmit = () => {
         localStorage.setItem('refresh_token', res.data.refresh)
 
         saveUsername(state.form.username)
+        sessionStorage.setItem('username',state.form.username)
         //登录成功后跳转到首页
         router.push({ path: '/home' })
     })

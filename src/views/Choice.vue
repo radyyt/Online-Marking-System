@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="left">
-            <el-row justify="space-between" align="middle">
+            <el-row justify="space-between">
                 <el-col :span="4">
                     <h3 style="margin-top: 0;">待选择</h3>
                 </el-col>
