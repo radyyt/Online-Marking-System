@@ -4,12 +4,13 @@
             <div class="head">
                 <span id="title">在线阅卷系统</span>
             </div>
-            <el-form label-position="top" :model="state.form" :rules="state.rules" class="form" ref="loginForm">
+            <el-form label-position="top" :model="state.form" :rules="state.rules" class="form" ref="formRef"
+                hide-required-asterisk>
                 <el-form-item label="账号" prop="username">
                     <el-input v-model="state.form.username" />
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="state.form.password" type="password" />
+                    <el-input v-model="state.form.password" type="password" show-password />
                 </el-form-item>
                 <el-form-item class="button-item">
                     <el-button type=primary @click="onSubmit" size="large">立即登录</el-button>
@@ -30,7 +31,7 @@ const saveUsername = (value) => store.commit('saveUsername', { name: value })
 
 const router = useRouter()
 
-const loginForm = ref(null)
+const formRef = ref(null)
 const state = reactive({
     form: {
         username: '',
@@ -39,30 +40,38 @@ const state = reactive({
     //表单验证规则
     rules: {
         username: [
-            { required: true, message: "请输入用户名", trigger: blur }
+            { required: true, message: '账户不能为空', trigger: 'blur' }
         ],
         password: [
-            { required: true, message: "请输入密码", trigger: blur }
+            { required: true, message: '密码不能为空', trigger: 'blur' }
         ]
     }
 })
 
 
 const onSubmit = () => {
-    console.log('submit')
-    axios.post('token/', {
-        username: state.form.username,
-        password: state.form.password
-    }).then(res => {
-        console.log(res)
-        localStorage.setItem('access_token', res.data.access)
-        localStorage.setItem('refresh_token', res.data.refresh)
+    formRef.value.validate((valid) => {
+        if (valid) {
+            console.log('submit!')
+            axios.post('token/', {
+                username: state.form.username,
+                password: state.form.password
+            }).then(res => {
+                console.log(res)
+                localStorage.setItem('access_token', res.data.access)
+                localStorage.setItem('refresh_token', res.data.refresh)
 
-        saveUsername(state.form.username)
-        sessionStorage.setItem('username',state.form.username)
-        //登录成功后跳转到首页
-        router.push({ path: '/home' })
+                saveUsername(state.form.username)
+                sessionStorage.setItem('username', state.form.username)
+                //登录成功后跳转到首页
+                router.push({ path: '/home' })
+            })
+        } else {
+            console.log('error submit!')
+            return false
+        }
     })
+
 }
 
 </script>

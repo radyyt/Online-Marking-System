@@ -9,6 +9,11 @@ const store = createStore({
       //储存已选择的单选题
       choice: [],
       subjective: [],
+      subjects: [
+        { value: 0, label: '语文' },
+        { value: 1, label: '数学' },
+        { value: 2, label: '英语' },
+      ]
     }
   },
   mutations: {
