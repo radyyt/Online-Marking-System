@@ -10,8 +10,6 @@ const refreshToken = () => {
 
 // 请求拦截器
 axios.interceptors.request.use((config) => {
-    // console.log(config)
-
     //访问的不是获取token的页面,则添加token
     if (['token/', 'token/refresh/'].indexOf(config.url) === -1) {
         const token = localStorage.getItem('access_token')

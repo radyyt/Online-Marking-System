@@ -27,8 +27,8 @@
                     </el-form-item>
                     <el-form-item label="类型" prop="type">
                         <el-radio-group v-model="state.choiceForm.type">
-                            <el-radio-button label="单项选择" />
-                            <el-radio-button label="多项选择" />
+                            <el-radio-button :label="0">单项选择</el-radio-button>
+                            <el-radio-button :label="1">多项选择</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="正确答案" prop="answer">
@@ -40,7 +40,8 @@
                         </el-checkbox-group>
                     </el-form-item>
                     <el-form-item label="配图" prop="pic">
-                        <el-upload action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15">
+                        <el-upload action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                            :on-change="saveImg" :auto-upload="false">
                             <el-button type="primary">点击此处上传图片</el-button>
                             <!-- <template #tip>
                                 <div class="el-upload__tip">
@@ -50,7 +51,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" @click="onSubmit(choiceFormRef)">提 交</el-button>
+                        <el-button type="success" @click="choiceFormSubmit">提 交</el-button>
                         <el-button type="danger" @click="reset(choiceFormRef)">重 置</el-button>
                     </el-form-item>
                 </el-form>
@@ -125,15 +126,18 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import { useStore } from 'vuex'
+import axios from '../utils/axios'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 const subjects = store.state.subjects
 
 const choiceFormRef = ref(null)
 const blankFormRef = ref(null)
+const subjectiveFormRef = ref(null)
+
 const checkAnswer = (rule, value, callback) => {
-    console.log(value)
-    if (state.choiceForm.type == '单项选择') {
+    if (state.choiceForm.type == 0) {
         if (value.length == 1) {
             callback()
         } else {
@@ -149,6 +153,7 @@ const checkAnswer = (rule, value, callback) => {
 }
 
 const state = reactive({
+    image: {},
     choiceForm: {
         desc: '',
         subject: 0,
@@ -156,8 +161,8 @@ const state = reactive({
         choices_B: '',
         choices_C: '',
         choices_D: '',
-        type: '',
-        answer: [],
+        type: 0,
+        answer: []
     },
     choiceFormRules: {
         desc: [
@@ -217,6 +222,12 @@ const filtedAnswer = computed(() => {
     return state.blankForm.answer.filter((item, index) => index < state.blankForm.num)
 })
 
+const saveImg = (pic) => {
+    state.image = pic
+    console.log(pic)
+    console.log(state.image)
+}
+
 const onSubmit = (formRef) => {
     formRef.validate((valid) => {
         if (valid) {
@@ -224,6 +235,36 @@ const onSubmit = (formRef) => {
             console.log(formRef)
         } else {
             console.log('error submit!')
+        }
+    })
+}
+
+
+const choiceFormSubmit = () => {
+    let formData = new FormData()
+    formData.append("body", state.choiceForm.desc)
+    formData.append("choices_A", state.choiceForm.choices_A)
+    formData.append("choices_B", state.choiceForm.choices_B)
+    formData.append("choices_C", state.choiceForm.choices_C)
+    formData.append("choices_D", state.choiceForm.choices_D)
+    formData.append("correct_answer", state.choiceForm.answer.toString())
+    formData.append("subject", state.choiceForm.subject)
+    formData.append("type", state.choiceForm.type)
+    formData.append("image", state.image.raw)
+
+    choiceFormRef.value.validate((valid) => {
+        if (valid) {
+            console.log('choiceForm submit!')
+            axios.post('choice/', formData
+                , { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
+                    console.log(res)
+                    ElMessage({
+                        message: '题目录入成功！',
+                        type: 'success',
+                    })
+                })
+        } else {
+            console.log('choiceForm error submit!')
         }
     })
 }
