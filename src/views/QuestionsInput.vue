@@ -74,7 +74,9 @@
                         <el-input v-model="item.value"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button @click="addBlank">添加答案</el-button>
+                        <el-tooltip effect="dark" content="最多可有3处填空" placement="right">
+                            <el-button @click="addBlank" :disabled="isDisabled">添加答案</el-button>
+                        </el-tooltip>
                     </el-form-item>
                     <el-form-item label="配图" prop="pic">
                         <el-upload action="#" :on-change="saveImg" :auto-upload="false">
@@ -211,7 +213,9 @@ const state = reactive({
     }
 })
 
+const isDisabled = false
 const addBlank = () => {
+    if (state.blankForm.num == 3) isDisabled = true
     state.blankForm.num += 1
     state.blankForm.answer.push({
         key: state.blankForm.num,
