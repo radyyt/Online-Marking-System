@@ -43,11 +43,6 @@
                         <el-upload action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
                             :on-change="saveImg" :auto-upload="false">
                             <el-button type="primary">点击此处上传图片</el-button>
-                            <!-- <template #tip>
-                                <div class="el-upload__tip">
-                                    jpg/png files with a size less than 500kb
-                                </div>
-                            </template> -->
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
@@ -70,30 +65,24 @@
                     <el-form-item label="题目" prop="desc">
                         <el-input v-model="state.blankForm.desc" type="textarea" autosize />
                     </el-form-item>
-                    <el-form-item label="填空数">
-                        <el-input-number v-model="state.blankForm.num" :min="1" :max="3" />
-                    </el-form-item>
-                    <el-form-item v-for="item in filtedAnswer" :label="'答案 ' + item.key" :prop="'answer' + item.index"
-                        :rules="{
+                    <el-form-item v-for="(item, index) in state.blankForm.answer" :key="item.key" :label="'答案 ' + item.key"
+                        :prop="'answer[' + index + '].value'" :rules="{
                             required: true,
                             message: '请输入答案',
                             trigger: 'blur',
                         }">
-                        <el-input v-model="item.value" />
+                        <el-input v-model="item.value"></el-input>
                     </el-form-item>
-
+                    <el-form-item>
+                        <el-button @click="addBlank">添加答案</el-button>
+                    </el-form-item>
                     <el-form-item label="配图" prop="pic">
-                        <el-upload action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15">
+                        <el-upload action="#" :on-change="saveImg" :auto-upload="false">
                             <el-button type="primary">点击此处上传图片</el-button>
-                            <!-- <template #tip>
-                                <div class="el-upload__tip">
-                                    jpg/png files with a size less than 500kb
-                                </div>
-                            </template> -->
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" @click="onSubmit(blankFormRef)">提 交</el-button>
+                        <el-button type="success" @click="blankFormSubmit">提 交</el-button>
                         <el-button type="danger" @click="reset(blankFormRef)">重 置</el-button>
                     </el-form-item>
                 </el-form>
@@ -102,7 +91,7 @@
                 <el-form :model="state.subjectiveForm" :rules="state.subjectiveFormRules" ref="subjectiveFormRef"
                     label-width="100px" label-position="left" status-icon hide-required-asterisk>
                     <el-form-item label="科目">
-                        <el-select v-model="state.blankForm.subject" placeholder="选择科目" filterable>
+                        <el-select v-model="state.subjectiveForm.subject" placeholder="选择科目" filterable>
                             <el-option v-for="item in subjects" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
@@ -111,10 +100,16 @@
                         <el-input v-model="state.subjectiveForm.desc" type="textarea" autosize />
                     </el-form-item>
                     <el-form-item label="答案" prop="answer">
-                        <el-input v-model="state.blankForm.desc" type="textarea" autosize />
+                        <el-input v-model="state.subjectiveForm.answer" type="textarea" autosize />
+                    </el-form-item>
+                    <el-form-item label="配图" prop="pic">
+                        <el-upload action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                            :on-change="saveImg" :auto-upload="false">
+                            <el-button type="primary">点击此处上传图片</el-button>
+                        </el-upload>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" @click="onSubmit(subjectiveFormRef)">提 交</el-button>
+                        <el-button type="success" @click="subjectiveFormSubmit">提 交</el-button>
                         <el-button type="danger" @click="reset(subjectiveFormRef)">重 置</el-button>
                     </el-form-item>
                 </el-form>
@@ -193,9 +188,7 @@ const state = reactive({
         subject: 0,
         num: 1,
         answer: [
-            { key: 1, value: "" },
-            { key: 2, value: "" },
-            { key: 3, value: "" },
+            { key: 1, value: '' },
         ],
     },
     blankFormRules: {
@@ -218,9 +211,13 @@ const state = reactive({
     }
 })
 
-const filtedAnswer = computed(() => {
-    return state.blankForm.answer.filter((item, index) => index < state.blankForm.num)
-})
+const addBlank = () => {
+    state.blankForm.num += 1
+    state.blankForm.answer.push({
+        key: state.blankForm.num,
+        value: ''
+    })
+}
 
 const saveImg = (pic) => {
     state.image = pic
@@ -228,16 +225,16 @@ const saveImg = (pic) => {
     console.log(state.image)
 }
 
-const onSubmit = (formRef) => {
-    formRef.validate((valid) => {
-        if (valid) {
-            console.log('submit!')
-            console.log(formRef)
-        } else {
-            console.log('error submit!')
-        }
-    })
-}
+// const onSubmit = (formRef) => {
+//     formRef.validate((valid) => {
+//         if (valid) {
+//             console.log('submit!')
+//             console.log(formRef)
+//         } else {
+//             console.log('error submit!')
+//         }
+//     })
+// }
 
 
 const choiceFormSubmit = () => {
@@ -250,7 +247,7 @@ const choiceFormSubmit = () => {
     formData.append("correct_answer", state.choiceForm.answer.toString())
     formData.append("subject", state.choiceForm.subject)
     formData.append("type", state.choiceForm.type)
-    formData.append("image", state.image.raw)
+    if (JSON.stringify(state.image) !== '{}') formData.append("image", state.image.raw)
 
     choiceFormRef.value.validate((valid) => {
         if (valid) {
@@ -262,9 +259,64 @@ const choiceFormSubmit = () => {
                         message: '题目录入成功！',
                         type: 'success',
                     })
+                }, err => {
+                    ElMessage({
+                        message: '题目录入失败！',
+                        type: 'error',
+                    })
                 })
         } else {
             console.log('choiceForm error submit!')
+        }
+    })
+}
+
+const blankFormSubmit = () => {
+    let formData = new FormData()
+    formData.append("body", state.blankForm.desc)
+    formData.append("blanks_num", state.blankForm.num)
+    formData.append("subject", state.blankForm.subject)
+    if (JSON.stringify(state.image) !== '{}') formData.append("image", state.image.raw)
+    for (let i = 0; i < state.blankForm.num; i++) {
+        formData.append("correct_answer_1", state.blankForm.answer[i].value)
+    }
+
+    blankFormRef.value.validate((valid) => {
+        if (valid) {
+            axios.post('blank/', formData).then(res => {
+                ElMessage({
+                    message: '题目录入成功！',
+                    type: 'success',
+                })
+            }, err => {
+                ElMessage({
+                    message: '题目录入失败！',
+                    type: 'error',
+                })
+            })
+        }
+    })
+}
+
+const subjectiveFormSubmit = () => {
+    let formData = new FormData()
+    formData.append("body", state.subjectiveForm.desc)
+    formData.append("correct_answer", state.subjectiveForm.answer)
+    formData.append("subject", state.subjectiveForm.subject)
+    if (JSON.stringify(state.image) !== '{}') formData.append("image", state.image.raw)
+    subjectiveFormRef.value.validate((valid) => {
+        if (valid) {
+            axios.post('subjective/', formData).then(res => {
+                ElMessage({
+                    message: '题目录入成功！',
+                    type: 'success',
+                })
+            }, err => {
+                ElMessage({
+                    message: '题目录入失败！',
+                    type: 'error',
+                })
+            })
         }
     })
 }
