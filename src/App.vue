@@ -9,7 +9,7 @@
           <CommonHeader />
         </el-header>
         <el-main>
-          <RouterView></RouterView>
+          <RouterView v-if="isRouterAlive"></RouterView>
         </el-main>
       </el-container>
     </el-container>
@@ -22,8 +22,8 @@
 <script setup>
 import CommonHeader from './components/CommonHeader.vue';
 import CommonAside from './components/CommonAside.vue';
-import { computed } from 'vue'
-import axios from 'axios';  
+import { computed, ref, provide, nextTick } from 'vue'
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -33,38 +33,48 @@ const showMenu = computed(() => store.state.showMenu)
 const isMenu = () => store.commit('isMenu')
 const noMenu = () => store.commit('noMenu')
 
-  //用于检测用户是否登录
-  router.beforeEach((to, from, next) => {
-    const access_token = localStorage.getItem('access_token')
-    const refresh_token = localStorage.getItem('refresh_token')
-
-    if (to.path  == '/login') {
-      noMenu()
-      next()
-    } else {
-      // 如果token存在
-      // 将token传回后台验证
-
-      if (access_token) {
-        isMenu()
-        next()
-      } else if (refresh_token) {
-        axios.post('token/refresh/', {
-          refresh: refresh_token,
-        }).then(res => {
-          localStorage.setItem('access_token', res.data.access)
-          localStorage.removeItem('refresh_token')
-        }).catch(() => {
-          localStorage.clear()
-        })
-      } else {
-        localStorage.clear()
-        console.log('no token')
-        noMenu()
-        next({ path: '/login' })
-      }
-    }
+//用于刷新页面
+const isRouterAlive = ref(true)
+const reload = () => {
+  isRouterAlive.value = false
+  nextTick(() => {
+    isRouterAlive.value = true
   })
+}
+provide('reload', reload)
+
+//用于检测用户是否登录
+router.beforeEach((to, from, next) => {
+  const access_token = localStorage.getItem('access_token')
+  const refresh_token = localStorage.getItem('refresh_token')
+
+  if (to.path == '/login') {
+    noMenu()
+    next()
+  } else {
+    // 如果token存在
+    // 将token传回后台验证
+
+    if (access_token) {
+      isMenu()
+      next()
+    } else if (refresh_token) {
+      axios.post('token/refresh/', {
+        refresh: refresh_token,
+      }).then(res => {
+        localStorage.setItem('access_token', res.data.access)
+        localStorage.removeItem('refresh_token')
+      }).catch(() => {
+        localStorage.clear()
+      })
+    } else {
+      localStorage.clear()
+      console.log('no token')
+      noMenu()
+      next({ path: '/login' })
+    }
+  }
+})
 </script>
 
 <style scoped>

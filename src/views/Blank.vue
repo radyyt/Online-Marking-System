@@ -48,6 +48,12 @@
                         <el-tag>{{ scope.row.subject_name }}</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column fixed="right" label="操  作" width="120" align="center">
+                    <template #default="scope">
+                        <!-- <el-button link type="primary" size="small" @click="handleClick">Detail</el-button> -->
+                        <el-button link type="danger" size="small" @click="deleteQuestion(scope.row.url)">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
         <div class="right">
@@ -74,7 +80,7 @@
 
 <script setup>
 import axios from '../utils/axios';
-import { reactive, ref } from 'vue';
+import { reactive, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useStore } from 'vuex';
@@ -124,6 +130,16 @@ const submitBtn = () => {
 //清除筛选
 const clearFilter = () => {
     tableRef.value.clearFilter()
+}
+
+//删除题目
+const reload = inject('reload')
+const deleteQuestion = (url) => {
+    let str = url.slice(26)
+    axios.delete(str).then(res => {
+        console.log(res)
+        reload()
+    })
 }
 
 </script>
