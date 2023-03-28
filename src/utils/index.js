@@ -7,4 +7,5 @@ export const pathMap = {
     questionsInput: '题库录入',
     papersPublish: '试卷发布',
     subjectiveQuestion: '主观题',
+    blankQuestion:'填空题',
 }

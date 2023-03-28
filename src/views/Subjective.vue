@@ -95,7 +95,7 @@ const state = reactive({
 })
 
 axios.get('subjective/').then((res) => {
-    console.log(res)
+    // console.log(res)
     state.info = res.data
 })
 
@@ -131,14 +131,15 @@ const clearFilter = () => {
 }
 
 //删除题目
-const reload = inject('reload')
-const deleteQuestion = (url) => {
-    let str = url.slice(26)
-    axios.delete(str).then(res => {
-        console.log(res)
-        reload()
-    })
-}
+const deleteQuestion = inject('deleteQuestion')
+// const reload = inject('reload')
+// const deleteQuestion = (url) => {
+//     let str = url.slice(26)
+//     axios.delete(str).then(res => {
+//         console.log(res)
+//         reload()
+//     })
+// }
 
 </script>
 

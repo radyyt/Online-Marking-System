@@ -97,7 +97,7 @@
 import axios from '../utils/axios';
 import { reactive, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { useStore } from 'vuex';
 
 const tableRef = ref()
@@ -112,7 +112,7 @@ const state = reactive({
 })
 
 axios.get('choice/').then((res) => {
-    console.log(res)
+    // console.log(res)
     state.info = res.data
 })
 
@@ -146,14 +146,35 @@ const clearFilter = () => {
 }
 
 //删除题目
-const reload = inject('reload')
-const deleteQuestion = (url) => {
-    let str = url.slice(26)
-    axios.delete(str).then(res => {
-        console.log(res)
-        reload()
-    })
-}
+const deleteQuestion = inject('deleteQuestion')
+// const deleteQuestion = (url) => {
+//     let str = url.slice(26)
+//     ElMessageBox.confirm(
+//         '确定要删除该题目吗？',
+//         '警告',
+//         {
+//             confirmButtonText: '确认',
+//             cancelButtonText: '取消',
+//             type: 'warning',
+//         }
+//     )
+//         .then(() => {
+//             axios.delete(str).then(res => {
+//                 console.log(res)
+//                 reload()
+//             })
+//             ElMessage({
+//                 type: 'success',
+//                 message: '成功删除',
+//             })
+//         })
+//         .catch(() => {
+//             ElMessage({
+//                 type: 'info',
+//                 message: '取消删除',
+//             })
+//         })
+// }
 
 </script>
 

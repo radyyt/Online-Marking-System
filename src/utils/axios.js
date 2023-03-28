@@ -1,4 +1,13 @@
 import axios from "axios";
+// import { useStore } from 'vuex';
+// import { useRouter } from 'vue-router';
+import router from '../router'
+import store from '../store'
+
+
+// const showMenu = computed(() => store.state.showMenu)
+// const isMenu = () => store.commit('isMenu')
+const noMenu = () => store.commit('noMenu')
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/'
 
@@ -38,6 +47,17 @@ axios.interceptors.response.use(res => {
             return axios(config)
         }).catch(err => {
             console.log('登录已失效，请重新登录')
+            ElMessageBox.alert('登录已失效，请重新登录', '提示', {
+                // if you want to disable its autofocus
+                // autofocus: false,
+                confirmButtonText: 'OK',
+            }).then(() => {
+                console.log('jump to login')
+                noMenu()
+                router.push('/login')
+            })
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
             return Promise.reject(err)
         })
     } else {

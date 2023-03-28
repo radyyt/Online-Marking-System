@@ -30,13 +30,14 @@ import { pathMap } from '../utils';
 import { useRouter } from 'vue-router';
 import { reactive } from 'vue';
 import { useStore } from 'vuex';
-import { computed } from 'vue'
+import { computed } from 'vue';
+import { ElMessageBox } from 'element-plus';
 
 const router = useRouter()
 const store = useStore()
 
 // const username = computed(() => { return store.state.username })
-const username = computed(()=>{ return sessionStorage.getItem('username')})
+const username = computed(() => { return sessionStorage.getItem('username') })
 const state = reactive({
     // user_name: '用户',
     pageName: ''
@@ -50,8 +51,21 @@ router.afterEach((to) => {
 const event = (command) => {
     console.log(command)
     if (command == "quit") {
-        localStorage.clear()
-        router.push({ path: '/login' })
+        ElMessageBox.confirm(
+            '确定要退出登录吗？',
+            '警告',
+            {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        ).then(() => {
+            localStorage.clear()
+            router.push({ path: '/login' })
+        }).catch(() => {
+            console.log('cancel')
+        })
+
     }
 }
 

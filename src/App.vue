@@ -26,6 +26,7 @@ import { computed, ref, provide, nextTick } from 'vue'
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const router = useRouter()
 const store = useStore()
@@ -38,10 +39,9 @@ const isRouterAlive = ref(true)
 const reload = () => {
   isRouterAlive.value = false
   nextTick(() => {
-    isRouterAlive.value = true
+    isRouterAlive.value = truef
   })
 }
-provide('reload', reload)
 
 //用于检测用户是否登录
 router.beforeEach((to, from, next) => {
@@ -50,6 +50,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.path == '/login') {
     noMenu()
+    // showMenu.value = false
     next()
   } else {
     // 如果token存在
@@ -57,6 +58,7 @@ router.beforeEach((to, from, next) => {
 
     if (access_token) {
       isMenu()
+      // showMenu.value = true
       next()
     } else if (refresh_token) {
       axios.post('token/refresh/', {
@@ -68,13 +70,50 @@ router.beforeEach((to, from, next) => {
         localStorage.clear()
       })
     } else {
-      localStorage.clear()
-      console.log('no token')
-      noMenu()
-      next({ path: '/login' })
+      ElMessageBox.alert('登录已失效，请重新登录', '提示', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: 'OK',
+      }).then(() => {
+        console.log('jump to login')
+        noMenu()
+        // showMenu.value = false
+        next({ path: '/login' })
+      })
     }
   }
 })
+
+//删除题目的函数
+const deleteQuestion = (url) => {
+  let str = url.slice(26)
+  ElMessageBox.confirm(
+    '确定要删除该题目吗？',
+    '警告',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      axios.delete(str).then(res => {
+        console.log(res)
+        reload()
+      })
+      ElMessage({
+        type: 'success',
+        message: '成功删除',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '取消删除',
+      })
+    })
+}
+provide('deleteQuestion', deleteQuestion)
 </script>
 
 <style scoped>
