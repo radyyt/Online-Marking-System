@@ -23,7 +23,7 @@ import { reactive } from 'vue';
 
 const state = reactive({
     choice: [],
-    subjective:[],
+    subjective: [],
 })
 
 const store = useStore()

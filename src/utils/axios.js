@@ -1,15 +1,17 @@
 import axios from "axios";
-// import { useStore } from 'vuex';
-// import { useRouter } from 'vue-router';
 import router from '../router'
 import store from '../store'
+import { ElMessageBox } from "element-plus";
 
 
 // const showMenu = computed(() => store.state.showMenu)
 // const isMenu = () => store.commit('isMenu')
 const noMenu = () => store.commit('noMenu')
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/'
+const instance = axios.create({
+    baseURL: 'http://127.0.0.1:8000/api/',
+    timeout: 1000
+})
 
 //刷新token
 const refreshToken = () => {
@@ -18,7 +20,7 @@ const refreshToken = () => {
 }
 
 // 请求拦截器
-axios.interceptors.request.use((config) => {
+instance.interceptors.request.use((config) => {
     //访问的不是获取token的页面,则添加token
     if (['token/', 'token/refresh/'].indexOf(config.url) === -1) {
         const token = localStorage.getItem('access_token')
@@ -30,7 +32,7 @@ axios.interceptors.request.use((config) => {
 })
 
 // 响应拦截器
-axios.interceptors.response.use(res => {
+instance.interceptors.response.use(res => {
     // console.log(res)
     return res
 }, err => {
@@ -46,7 +48,7 @@ axios.interceptors.response.use(res => {
             config.headers.Authorization = 'Bearer ' + token
             return axios(config)
         }).catch(err => {
-            console.log('登录已失效，请重新登录')
+            console.log('登录失效')
             ElMessageBox.alert('登录已失效，请重新登录', '提示', {
                 // if you want to disable its autofocus
                 // autofocus: false,
@@ -65,4 +67,4 @@ axios.interceptors.response.use(res => {
     }
 })
 
-export default axios
+export default instance

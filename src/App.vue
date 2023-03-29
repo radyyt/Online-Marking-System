@@ -22,8 +22,8 @@
 <script setup>
 import CommonHeader from './components/CommonHeader.vue';
 import CommonAside from './components/CommonAside.vue';
-import { computed, ref, provide, nextTick } from 'vue'
-import axios from 'axios';
+import { computed, ref, provide, nextTick } from 'vue';
+import axios from './utils/axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { ElMessageBox, ElMessage } from 'element-plus'
@@ -39,7 +39,7 @@ const isRouterAlive = ref(true)
 const reload = () => {
   isRouterAlive.value = false
   nextTick(() => {
-    isRouterAlive.value = truef
+    isRouterAlive.value = true
   })
 }
 
@@ -86,7 +86,6 @@ router.beforeEach((to, from, next) => {
 
 //删除题目的函数
 const deleteQuestion = (url) => {
-  let str = url.slice(26)
   ElMessageBox.confirm(
     '确定要删除该题目吗？',
     '警告',
@@ -97,7 +96,7 @@ const deleteQuestion = (url) => {
     }
   )
     .then(() => {
-      axios.delete(str).then(res => {
+      axios.delete(url, { baseURL: '' }).then(res => {
         console.log(res)
         reload()
       })

@@ -282,7 +282,7 @@ const blankFormSubmit = () => {
     formData.append("subject", state.blankForm.subject)
     if (JSON.stringify(state.image) !== '{}') formData.append("image", state.image.raw)
     for (let i = 0; i < state.blankForm.num; i++) {
-        formData.append("correct_answer_1", state.blankForm.answer[i].value)
+        formData.append("correct_answer_" + (i + 1), state.blankForm.answer[i].value)
     }
 
     blankFormRef.value.validate((valid) => {
