@@ -48,7 +48,7 @@
                         <el-tag>{{ scope.row.subject_name }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操  作" width="120" align="center">
+                <el-table-column fixed="right" label="操作" width="120" align="center">
                     <template #default="scope">
                         <!-- <el-button link type="primary" size="small" @click="handleClick">Detail</el-button> -->
                         <el-button link type="danger" size="small" @click="deleteQuestion(scope.row.url)">删除</el-button>

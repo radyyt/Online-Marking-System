@@ -1,11 +1,16 @@
 <template>
     <div>
         <el-dialog v-model="dialogVisible" title="选择试卷" width="30%" align-center>
-            <span>This is a message</span>
+            <el-select v-model="state.selectedSubject" placeholder="请选择科目" size="large" style="margin-right: 20px;">
+                <el-option v-for="item in subject" :label="item" :value="item" />
+            </el-select>
+            <el-select v-model="state.selectedTitle" placeholder="请选择试卷" size="large">
+                <el-option v-for="item in filteredExams" :key="item.id" :label="item.title" :value="item.title" />
+            </el-select>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">
+                    <el-button type="primary" @click="submitBtn">
                         确定
                     </el-button>
                 </span>
@@ -15,20 +20,45 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import axios from '../utils/axios';
+import { ref, reactive, computed } from 'vue';
+const state = reactive({
+    info: [],
+    selectedSubject: '',
+    selectedTitle: '',
+})
+const filteredExams = computed(() => state.info.filter((item) => item.subject_name == state.selectedSubject))
 const dialogVisible = ref(false)
 const handleDialog = () => {
     dialogVisible.value = true
 }
 defineExpose({
     handleDialog,
-
 })
 
+//从后端获取试卷信息
+axios.get('exam/').then((res) => {
+    state.info = res.data
+    console.log(state.info);
+})
+
+const subject = [
+    '数学',
+    '语文',
+    '英语',
+]
+
+const submitBtn = () => {
+    console.log(state.selectedSubject + '-' + state.selectedTitle)
+}
 </script>
 
 <style lang="scss" scoped>
 .dialog-footer button:first-child {
     margin-right: 10px;
+}
+
+.tip {
+    margin-top: 20px;
 }
 </style>

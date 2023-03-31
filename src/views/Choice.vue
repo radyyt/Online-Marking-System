@@ -1,13 +1,13 @@
 <template>
     <div class="container">
-        <SelectExam ref="selectExamRef"/>
+        <SelectExam ref="selectExamRef" />
         <div class="left">
             <el-row justify="space-between">
                 <el-col :span="4">
                     <h3 style="margin-top: 0;">待选择</h3>
                 </el-col>
                 <el-col :span="2">
-                    <el-button @click="clearFilter()" type="danger">清除筛选</el-button>
+                    <!-- <el-button @click="clearFilter()" type="danger">清除筛选</el-button> -->
                 </el-col>
             </el-row>
             <el-table :data="state.info" @selection-change="questionSelect" ref="tableRef">
@@ -58,7 +58,7 @@
                         <el-tag>{{ scope.row.type_name }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操  作" width="120" align="center">
+                <el-table-column fixed="right" label="操作" width="120" align="center">
                     <template #default="scope">
                         <!-- <el-button link type="primary" size="small" @click="handleClick">Detail</el-button> -->
                         <el-button link type="danger" size="small" @click="deleteQuestion(scope.row.url)">删除</el-button>
@@ -110,6 +110,7 @@ const state = reactive({
     selected: [],
 })
 
+//获取题目信息
 axios.get('choice/').then((res) => {
     // console.log(res)
     state.info = res.data
