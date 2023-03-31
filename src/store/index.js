@@ -13,7 +13,7 @@ const store = createStore({
         { value: 0, label: '语文' },
         { value: 1, label: '数学' },
         { value: 2, label: '英语' },
-      ]
+      ],
     }
   },
   mutations: {

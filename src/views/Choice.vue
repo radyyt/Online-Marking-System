@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <SelectExam ref="selectExamRef"/>
         <div class="left">
             <el-row justify="space-between">
                 <el-col :span="4">
@@ -88,7 +89,6 @@
                     </el-icon>
                 </el-button>
             </el-row>
-
         </div>
     </div>
 </template>
@@ -99,11 +99,10 @@ import { reactive, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useStore } from 'vuex';
+import SelectExam from '../components/SelectExam.vue';
 
-const tableRef = ref()
-const store = useStore()
-//保存选中题目到store
-const saveChoice = (value) => store.dispatch('saveChoice', value)
+const tableRef = ref(null)
+const selectExamRef = ref(null)
 
 const router = useRouter()
 const state = reactive({
@@ -132,11 +131,12 @@ const questionSelect = (question) => {
 }
 
 const submitBtn = () => {
-    saveChoice(state.selected).then(() => {
-        ElMessage({ message: '已提交至试卷', type: 'success' })
-    }, () => {
-        ElMessage({ message: '提交至试卷失败', type: 'error' })
-    })
+    selectExamRef.value.handleDialog()
+    // saveChoice(state.selected).then(() => {
+    //     ElMessage({ message: '已提交至试卷', type: 'success' })
+    // }, () => {
+    //     ElMessage({ message: '提交至试卷失败', type: 'error' })
+    // })
     // console.log(state.selected)
 }
 
@@ -175,6 +175,8 @@ const deleteQuestion = inject('deleteQuestion')
 //             })
 //         })
 // }
+
+
 
 </script>
 

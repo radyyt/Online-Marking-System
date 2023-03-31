@@ -40,11 +40,11 @@
                         <el-menu-item index="1-4-1">item one</el-menu-item>
                     </el-sub-menu> -->
                 </el-sub-menu>
-                <el-menu-item index="/papers/publish">
+                <el-menu-item index="/exams/manage">
                     <el-icon>
                         <Printer />
                     </el-icon>
-                    <span class="menu-title">试卷发布</span>
+                    <span class="menu-title">试卷管理</span>
                 </el-menu-item>
                 <el-menu-item index="/scores/correct">
                     <el-icon>

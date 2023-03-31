@@ -7,7 +7,7 @@ const routes = [
   { path: '/questions/blank', name: 'blankQuestion', component: () => import('../views/Blank.vue') },
   { path: '/questions/subjective', name: 'subjectiveQuestion', component: () => import('../views/Subjective.vue') },
   { path: '/questions/input', name: 'questionsInput', component: () => import('../views/QuestionsInput.vue') },
-  { path: '/papers/publish', name: 'papersPublish', component: () => import('../views/PapersPublish.vue') },
+  { path: '/exams/manage', name: 'examsManage', component: () => import('../views/ExamsManage.vue') },
   { path: '/:pathMatch(.*)', component: () => import('../views/NotFound.vue') }
 ]
 
