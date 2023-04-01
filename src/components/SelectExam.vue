@@ -1,7 +1,8 @@
 <template>
     <div>
         <el-dialog v-model="dialogVisible" title="选择试卷" width="30%" align-center>
-            <el-select v-model="state.selectedSubject" placeholder="请选择科目" size="large" style="margin-right: 20px;">
+            <el-select v-model="state.selectedSubject" placeholder="请选择科目" style="margin-right: 20px;" size="large"
+                @change="state.selectedTitle = ''">
                 <el-option v-for="item in subject" :label="item" :value="item" />
             </el-select>
             <el-select v-model="state.selectedTitle" placeholder="请选择试卷" size="large">
