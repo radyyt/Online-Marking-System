@@ -6,14 +6,14 @@ const store = createStore({
     return {
       username: '',
       showMenu: false,
-      //储存已选择的单选题
-      choice: [],
-      subjective: [],
       subjects: [
         { value: 0, label: '语文' },
         { value: 1, label: '数学' },
         { value: 2, label: '英语' },
       ],
+      //已选择的题目
+      selected: [],
+      selectedExamId: undefined
     }
   },
   mutations: {
@@ -27,13 +27,11 @@ const store = createStore({
       console.log(payload.name)
       state.username = payload.name
     },
-    saveChoice(state, payload) {
-      state.choice = payload
-      console.log(state.choice)
+    saveSelected(state, payload) {
+      state.selected = payload
     },
-    saveSubjective(state, payload) {
-      state.subjective = payload
-      console.log(state.subjective)
+    saveSelectedExamId(state, payload) {
+      state.selectedExamId = payload
     },
   },
   actions: {

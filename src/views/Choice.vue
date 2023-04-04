@@ -64,7 +64,6 @@
                         <el-button link type="danger" size="small" @click="deleteQuestion(scope.row.url)">删除</el-button>
                     </template>
                 </el-table-column>
-
             </el-table>
         </div>
         <div class="right">
@@ -95,15 +94,15 @@
 
 <script setup>
 import axios from '../utils/axios';
-import { reactive, ref, inject } from 'vue';
+import { reactive, ref, inject, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useStore } from 'vuex';
 import SelectExam from '../components/SelectExam.vue';
 
 const tableRef = ref(null)
-const selectExamRef = ref(null)
 
+const store = useStore()
 const router = useRouter()
 const state = reactive({
     info: [],
@@ -131,14 +130,17 @@ const questionSelect = (question) => {
     state.selected = question
 }
 
+//提交到试卷
+const selectExamRef = ref(null)
+const saveSelected = (payload) => { store.commit('saveSelected', payload) }
 const submitBtn = () => {
     selectExamRef.value.handleDialog()
+    saveSelected(state.selected)
     // saveChoice(state.selected).then(() => {
     //     ElMessage({ message: '已提交至试卷', type: 'success' })
     // }, () => {
     //     ElMessage({ message: '提交至试卷失败', type: 'error' })
     // })
-    // console.log(state.selected)
 }
 
 //清除筛选
@@ -148,34 +150,6 @@ const clearFilter = () => {
 
 //删除题目
 const deleteQuestion = inject('deleteQuestion')
-// const deleteQuestion = (url) => {
-//     let str = url.slice(26)
-//     ElMessageBox.confirm(
-//         '确定要删除该题目吗？',
-//         '警告',
-//         {
-//             confirmButtonText: '确认',
-//             cancelButtonText: '取消',
-//             type: 'warning',
-//         }
-//     )
-//         .then(() => {
-//             axios.delete(str).then(res => {
-//                 console.log(res)
-//                 reload()
-//             })
-//             ElMessage({
-//                 type: 'success',
-//                 message: '成功删除',
-//             })
-//         })
-//         .catch(() => {
-//             ElMessage({
-//                 type: 'info',
-//                 message: '取消删除',
-//             })
-//         })
-// }
 
 
 

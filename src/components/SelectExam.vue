@@ -23,6 +23,10 @@
 <script setup>
 import axios from '../utils/axios';
 import { ref, reactive, computed } from 'vue';
+import { useStore } from 'vuex';
+import { ElMessage } from 'element-plus';
+
+const store = useStore()
 const state = reactive({
     info: [],
     selectedSubject: '',
@@ -48,9 +52,20 @@ const subject = [
     '语文',
     '英语',
 ]
+const selected = computed(() => store.state.selected)
+const saveSelectedExamId = (payload) => { store.commit('saveSelectedExamId', payload) }
 
 const submitBtn = () => {
-    console.log(state.selectedSubject + '-' + state.selectedTitle)
+    console.log(selected.value);
+    const examId = filteredExams.value.find(item => item.title === state.selectedTitle).id
+    const questions = selected.value.map(({ type, url }) => ({ type, question_url: url, exam: examId }))
+    console.log(questions);
+    axios.post('exam-question/', questions).then(() => {
+        ElMessage({ message: '已提交至试卷:' + state.selectedTitle, type: 'success' })
+    }, () => {
+        ElMessage({ message: '提交至试卷失败', type: 'error' })
+    })
+    saveSelectedExamId(examId)
 }
 </script>
 

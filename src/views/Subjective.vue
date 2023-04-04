@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <SelectExam ref="selectExamRef" />
         <div class="left">
             <el-row justify="space-between">
                 <el-col :span="4">
@@ -82,6 +83,8 @@ import { reactive, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useStore } from 'vuex';
+import SelectExam from '../components/SelectExam.vue';
+
 
 const tableRef = ref()
 const store = useStore()
@@ -115,14 +118,15 @@ const questionSelect = (question) => {
     state.selected = question
 }
 
-//提交按钮事件
+//提交到试卷
+const selectExamRef = ref(null)
+const saveSelected = (payload) => { store.commit('saveSelected', payload) }
 const submitBtn = () => {
-    saveSubjective(state.selected).then(() => {
-        ElMessage({ message: '已提交至试卷', type: 'success' })
-    }, () => {
-        ElMessage({ message: '提交至试卷失败', type: 'error' })
-    })
-    // console.log(state.selected)
+    selectExamRef.value.handleDialog()
+    //添加type字段（3表示主观题)
+    state.selected.forEach(item => item.type = 3)
+    console.log(state.selected);
+    saveSelected(state.selected)
 }
 
 //清除筛选
