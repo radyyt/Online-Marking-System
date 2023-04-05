@@ -42,7 +42,7 @@
                 </el-sub-menu>
                 <el-menu-item index="/exams/manage">
                     <el-icon>
-                        <Printer />
+                        <Files />
                     </el-icon>
                     <span class="menu-title">试卷管理</span>
                 </el-menu-item>

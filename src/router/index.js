@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/login', component: () => import('../views/Login.vue') },
@@ -8,12 +8,13 @@ const routes = [
   { path: '/questions/subjective', name: 'subjectiveQuestion', component: () => import('../views/Subjective.vue') },
   { path: '/questions/input', name: 'questionsInput', component: () => import('../views/QuestionsInput.vue') },
   { path: '/exams/manage', name: 'examsManage', component: () => import('../views/ExamsManage.vue') },
+  { path: '/exams/detail/:examId', name: 'examDetail', component: () => import('../components/ExamDetail.vue') },
   { path: '/:pathMatch(.*)', component: () => import('../views/NotFound.vue') }
 ]
 
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 })
 

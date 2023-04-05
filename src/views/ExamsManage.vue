@@ -11,16 +11,14 @@
             </el-col>
         </el-row>
         <el-space warp size="default">
-            <el-card class="box-card" v-for="item in state.info" :key="item.id">
+            <el-card class="box-card" v-for="item in state.info" :key="item.id" shadow="hover"
+                @click="showExamDetail(item.id)">
                 <template #header>
                     <div class="card-header">
                         <span>{{ item.title }}</span>
                         <el-button-group>
                             <el-button type="info" size="default" @click=""><el-icon>
-                                    <EditPen />
-                                </el-icon></el-button>
-                            <el-button type="info" size="default" @click=""><el-icon>
-                                    <Share />
+                                    <Printer />
                                 </el-icon></el-button>
                             <el-button type="info" size="default" @click=""><el-icon>
                                     <Delete />
@@ -39,6 +37,7 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import axios from '../utils/axios'
 import { reactive } from 'vue';
 
@@ -53,6 +52,12 @@ axios.get('exam/').then((res) => {
 
 const addExam = () => {
     console.log('addExam')
+}
+
+//试卷详情
+const router = useRouter()
+const showExamDetail = (id) => {
+    router.push({ name: 'examDetail', params: { examId: id } })
 }
 </script>
 

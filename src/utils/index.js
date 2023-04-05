@@ -6,4 +6,5 @@ export const pathMap = {
     examsManage: '试卷管理',
     subjectiveQuestion: '主观题',
     blankQuestion: '填空题',
+    examDetail: '试卷详情',
 }
