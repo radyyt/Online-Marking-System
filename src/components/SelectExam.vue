@@ -3,7 +3,7 @@
         <el-dialog v-model="dialogVisible" title="选择试卷" width="30%" align-center>
             <el-select v-model="state.selectedSubject" placeholder="请选择科目" style="margin-right: 20px;" size="large"
                 @change="state.selectedTitle = ''">
-                <el-option v-for="item in subject" :label="item" :value="item" />
+                <el-option v-for="item in subjects" :label="item.label" :value="item.value" />
             </el-select>
             <el-select v-model="state.selectedTitle" placeholder="请选择试卷" size="large">
                 <el-option v-for="item in filteredExams" :key="item.id" :label="item.title" :value="item.title" />
@@ -29,10 +29,10 @@ import { ElMessage } from 'element-plus';
 const store = useStore()
 const state = reactive({
     info: [],
-    selectedSubject: '',
+    selectedSubject: undefined,
     selectedTitle: '',
 })
-const filteredExams = computed(() => state.info.filter((item) => item.subject_name == state.selectedSubject))
+const filteredExams = computed(() => state.info.filter((item) => item.subject == state.selectedSubject))
 const dialogVisible = ref(false)
 const handleDialog = () => {
     dialogVisible.value = true
@@ -47,11 +47,7 @@ axios.get('exam/').then((res) => {
     console.log(state.info);
 })
 
-const subject = [
-    '数学',
-    '语文',
-    '英语',
-]
+const subjects = store.state.subjects
 const selected = computed(() => store.state.selected)
 const saveSelectedExamId = (payload) => { store.commit('saveSelectedExamId', payload) }
 
@@ -59,13 +55,13 @@ const submitBtn = () => {
     console.log(selected.value);
     const examId = filteredExams.value.find(item => item.title === state.selectedTitle).id
     const questions = selected.value.map(({ type, url }) => ({ type, question_url: url, exam: examId }))
-    console.log(questions);
     axios.post('exam-question/', questions).then(() => {
         ElMessage({ message: '已提交至试卷:' + state.selectedTitle, type: 'success' })
     }, () => {
         ElMessage({ message: '提交至试卷失败', type: 'error' })
     })
     saveSelectedExamId(examId)
+    dialogVisible.value = false
 }
 </script>
 

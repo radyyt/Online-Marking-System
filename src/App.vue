@@ -42,6 +42,7 @@ const reload = () => {
     isRouterAlive.value = true
   })
 }
+provide('reload', reload)
 
 //用于检测用户是否登录
 router.beforeEach((to, from, next) => {
