@@ -16,7 +16,7 @@
                     <template #default="props">
                         <div class="expand-block">
                             <h4 class="title">题目详情：</h4>
-                            <div class="question-zone">
+                            <div class="question-zone" v-if="props.row.image != null">
                                 <el-row align="middle">
                                     <el-col :span="18">
                                         <p style="margin: 0px;"> {{ props.row.body }}</p>
@@ -29,6 +29,19 @@
                                     </el-col>
                                     <el-col :span="4" :offset="2">
                                         <el-image fit="contain" :src=props.row.image />
+                                    </el-col>
+                                </el-row>
+                            </div>
+                            <div class="question-zone" v-else>
+                                <el-row align="middle">
+                                    <el-col>
+                                        <p style="margin: 0px;"> {{ props.row.body }}</p>
+                                        <div id="choices-zone">
+                                            <span class="choices">A:&nbsp&nbsp{{ props.row.choices_A }}</span>
+                                            <span class="choices">B:&nbsp&nbsp{{ props.row.choices_B }}</span>
+                                            <span class="choices">C:&nbsp&nbsp{{ props.row.choices_C }}</span>
+                                            <span class="choices">D:&nbsp&nbsp{{ props.row.choices_D }}</span>
+                                        </div>
                                     </el-col>
                                 </el-row>
                             </div>
@@ -150,8 +163,6 @@ const clearFilter = () => {
 
 //删除题目
 const deleteQuestion = inject('deleteQuestion')
-
-
 
 </script>
 

@@ -54,7 +54,7 @@ const saveSelectedExamId = (payload) => { store.commit('saveSelectedExamId', pay
 const submitBtn = () => {
     console.log(selected.value);
     const examId = filteredExams.value.find(item => item.title === state.selectedTitle).id
-    const questions = selected.value.map(({ type, url }) => ({ type, question_url: url, exam: examId }))
+    const questions = selected.value.map(({ type, url, id }) => ({ type, question_url: url, exam: examId, question_id: id }))
     axios.post('exam-question/', questions).then(() => {
         ElMessage({ message: '已提交至试卷:' + state.selectedTitle, type: 'success' })
     }, () => {

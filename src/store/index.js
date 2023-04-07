@@ -10,6 +10,7 @@ const store = createStore({
         { value: 0, label: '语文' },
         { value: 1, label: '数学' },
         { value: 2, label: '英语' },
+        { value: 3, label: '政治' },
       ],
       //已选择的题目
       selected: [],

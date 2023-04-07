@@ -19,7 +19,7 @@
                             <el-button type="info" size="default" @click="showExamDetail(item)"><el-icon>
                                     <View />
                                 </el-icon></el-button>
-                            <el-button type="info" size="default" @click="printExam"><el-icon>
+                            <el-button type="info" size="default" @click="printExam(item)"><el-icon>
                                     <Printer />
                                 </el-icon></el-button>
                             <el-button type="info" size="default" @click="deleteExam(item)"><el-icon>
@@ -111,8 +111,11 @@ const showExamDetail = (item) => {
 }
 
 //打印试卷
-const printExam = () => {
+const printExam = (item) => {
     console.log('print');
+    axios.get('http://127.0.0.1:8000/api/exam/' + item.id + '/exam-pdf/').then(res => {
+        window.open(res.data)
+    })
 }
 
 //删除试卷
