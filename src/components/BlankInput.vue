@@ -49,6 +49,7 @@ const subjects = store.state.subjects
 const blankFormRef = ref(null)
 
 const state = reactive({
+    questionUrl: '',
     image: {},
     blankForm: {
         desc: '',
@@ -83,6 +84,7 @@ const saveImg = (pic) => {
 
 const blankFormSubmit = () => {
     let formData = new FormData()
+    const url = state.questionUrl
     formData.append("body", state.blankForm.desc)
     formData.append("blanks_num", state.blankForm.num)
     formData.append("subject", state.blankForm.subject)
@@ -93,17 +95,33 @@ const blankFormSubmit = () => {
 
     blankFormRef.value.validate((valid) => {
         if (valid) {
-            axios.post('blank/', formData).then(res => {
-                ElMessage({
-                    message: '题目录入成功！',
-                    type: 'success',
+            if (url != '') {
+                axios.put(url, formData
+                    , { headers: { 'Content-Type': 'multipart/form-data' }, baseURL: '' }).then(res => {
+                        console.log(res)
+                        ElMessage({
+                            message: '题目录入成功！',
+                            type: 'success',
+                        })
+                    }, () => {
+                        ElMessage({
+                            message: '题目录入失败！',
+                            type: 'error',
+                        })
+                    })
+            } else {
+                axios.post('blank/', formData).then(res => {
+                    ElMessage({
+                        message: '题目录入成功！',
+                        type: 'success',
+                    })
+                }, err => {
+                    ElMessage({
+                        message: '题目录入失败！',
+                        type: 'error',
+                    })
                 })
-            }, err => {
-                ElMessage({
-                    message: '题目录入失败！',
-                    type: 'error',
-                })
-            })
+            }
         }
     })
 }
@@ -111,6 +129,28 @@ const blankFormSubmit = () => {
 const reset = (formRef) => {
     formRef.resetFields()
 }
+
+const props = defineProps(['question'])
+//修改问题页面处理
+const handleQuestion = (q) => {
+    const form = state.blankForm
+    form.desc = q.body
+    form.subject = q.subject
+    form.answer[0].value = q.correct_answer_1
+    if (q.correct_answer_2 != null) {
+        form.num = 2
+        form.answer.push({ key: 2, value: q.correct_answer_2 })
+    }
+    if (q.correct_answer_3 != null) {
+        form.num = 3
+        form.answer.push({ key: 3, value: q.correct_answer_3 })
+    }
+    state.questionUrl = q.url
+}
+handleQuestion(props.question)
+defineExpose({
+    blankFormSubmit,
+})
 </script>
 
 <style lang="scss" scoped></style>

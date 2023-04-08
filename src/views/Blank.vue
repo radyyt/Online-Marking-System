@@ -1,6 +1,17 @@
 <template>
     <div class="container">
         <SelectExam ref="selectExamRef" />
+        <el-dialog v-model="dialogVisible" title="编辑试卷" width="50%" :before-close="handleClose" align-center>
+            <BlankInput :question="state.current" ref="blankInputRef" />
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="sumbitChange">
+                        确认
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
         <div class="left">
             <el-row justify="space-between">
                 <el-col :span="4">
@@ -51,7 +62,7 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="120" align="center">
                     <template #default="scope">
-                        <!-- <el-button link type="primary" size="small" @click="handleClick">Detail</el-button> -->
+                        <el-button link type="primary" size="small" @click="editQuestion(scope.row)">编辑</el-button>
                         <el-button link type="danger" size="small" @click="deleteQuestion(scope.row.url)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -86,6 +97,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useStore } from 'vuex';
 import SelectExam from '../components/SelectExam.vue';
+import BlankInput from '../components/BlankInput.vue';
 
 const tableRef = ref()
 const store = useStore()
@@ -96,6 +108,7 @@ const router = useRouter()
 const state = reactive({
     info: [],
     selected: [],
+    current: null,
 })
 
 axios.get('blank/').then((res) => {
@@ -147,14 +160,35 @@ const clearFilter = () => {
 
 //删除题目
 const deleteQuestion = inject('deleteQuestion')
-// const reload = inject('reload')
-// const deleteQuestion = (url) => {
-//     let str = url.slice(26)
-//     axios.delete(str).then(res => {
-//         console.log(res)
-//         reload()
-//     })
-// }
+
+//编辑题目
+const dialogVisible = ref(false)
+const handleClose = (done) => {
+    ElMessageBox.confirm(
+        '将不会保存修改，确定要关闭吗?',
+        'Warning',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '返回',
+            type: 'warning',
+        }
+    ).then(() => {
+        done()
+    }).catch(() => {
+        // catch error
+    })
+}
+const editQuestion = (row) => {
+    dialogVisible.value = true
+    console.log(row);
+    state.current = row
+}
+const blankInputRef = ref(null)
+const sumbitChange = () => {
+    blankInputRef.value.blankFormSubmit()
+    window.location.reload()
+    dialogVisible.value = false
+}
 
 </script>
 

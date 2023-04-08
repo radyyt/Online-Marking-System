@@ -62,6 +62,8 @@ const subjects = store.state.subjects
 
 const choiceFormRef = ref(null)
 
+
+
 const checkAnswer = (rule, value, callback) => {
     if (state.choiceForm.type == 0) {
         if (value.length == 1) {
@@ -79,6 +81,7 @@ const checkAnswer = (rule, value, callback) => {
 }
 
 const state = reactive({
+    questionUrl: '',
     image: {},
     choiceForm: {
         desc: '',
@@ -124,6 +127,7 @@ const saveImg = (pic) => {
 
 const choiceFormSubmit = () => {
     let formData = new FormData()
+    const url = state.questionUrl
     formData.append("body", state.choiceForm.desc)
     formData.append("choices_A", state.choiceForm.choices_A)
     formData.append("choices_B", state.choiceForm.choices_B)
@@ -137,19 +141,35 @@ const choiceFormSubmit = () => {
     choiceFormRef.value.validate((valid) => {
         if (valid) {
             console.log('choiceForm submit!')
-            axios.post('choice/', formData
-                , { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
-                    console.log(res)
-                    ElMessage({
-                        message: '题目录入成功！',
-                        type: 'success',
+            if (url != '') {
+                axios.put(url, formData
+                    , { headers: { 'Content-Type': 'multipart/form-data' }, baseURL: '' }).then(res => {
+                        console.log(res)
+                        ElMessage({
+                            message: '题目录入成功！',
+                            type: 'success',
+                        })
+                    }, () => {
+                        ElMessage({
+                            message: '题目录入失败！',
+                            type: 'error',
+                        })
                     })
-                }, err => {
-                    ElMessage({
-                        message: '题目录入失败！',
-                        type: 'error',
+            } else {
+                axios.post('choice/', formData
+                    , { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
+                        console.log(res)
+                        ElMessage({
+                            message: '题目录入成功！',
+                            type: 'success',
+                        })
+                    }, () => {
+                        ElMessage({
+                            message: '题目录入失败！',
+                            type: 'error',
+                        })
                     })
-                })
+            }
         } else {
             console.log('choiceForm error submit!')
         }
@@ -159,6 +179,25 @@ const choiceFormSubmit = () => {
 const reset = (formRef) => {
     formRef.resetFields()
 }
+
+const props = defineProps(['question'])
+//修改问题页面处理
+const handleQuestion = (q) => {
+    const form = state.choiceForm
+    form.desc = q.body
+    form.choices_A = q.choices_A
+    form.choices_B = q.choices_B
+    form.choices_C = q.choices_C
+    form.choices_D = q.choices_D
+    form.answer.push(q.correct_answer)
+    form.subject = q.subject
+    form.type = q.type
+    state.questionUrl = q.url
+}
+handleQuestion(props.question)
+defineExpose({
+    choiceFormSubmit,
+})
 </script>
 
 <style lang="scss" scoped></style>

@@ -32,7 +32,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import axios from '../utils/axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage,ElMessageBox } from 'element-plus'
 
 const store = useStore()
 const subjects = store.state.subjects
@@ -40,6 +40,7 @@ const subjects = store.state.subjects
 const subjectiveFormRef = ref(null)
 
 const state = reactive({
+    questionUrl: '',
     image: {},
     subjectiveForm: {
         desc: '',
@@ -70,17 +71,35 @@ const subjectiveFormSubmit = () => {
     if (JSON.stringify(state.image) !== '{}') formData.append("image", state.image.raw)
     subjectiveFormRef.value.validate((valid) => {
         if (valid) {
-            axios.post('subjective/', formData).then(res => {
-                ElMessage({
-                    message: '题目录入成功！',
-                    type: 'success',
+            const url = state.questionUrl
+            if (url != '') {
+                axios.put(url, formData
+                    , { headers: { 'Content-Type': 'multipart/form-data' }, baseURL: '' }).then(res => {
+                        console.log(res)
+                        ElMessage({
+                            message: '题目录入成功！',
+                            type: 'success',
+                        })
+                    }, () => {
+                        ElMessage({
+                            message: '题目录入失败！',
+                            type: 'error',
+                        })
+                    })
+            } else {
+                axios.post('subjective/', formData).then(res => {
+                    ElMessage({
+                        message: '题目录入成功！',
+                        type: 'success',
+                    })
+                }, err => {
+                    ElMessage({
+                        message: '题目录入失败！',
+                        type: 'error',
+                    })
                 })
-            }, err => {
-                ElMessage({
-                    message: '题目录入失败！',
-                    type: 'error',
-                })
-            })
+            }
+
         }
     })
 }
@@ -88,6 +107,20 @@ const subjectiveFormSubmit = () => {
 const reset = (formRef) => {
     formRef.resetFields()
 }
+
+const props = defineProps(['question'])
+//修改问题页面处理
+const handleQuestion = (q) => {
+    const form = state.subjectiveForm
+    form.desc = q.body
+    form.subject = q.subject
+    form.answer = q.correct_answer
+    state.questionUrl = q.url
+}
+handleQuestion(props.question)
+defineExpose({
+    subjectiveFormSubmit,
+})
 </script>
 
 <style lang="scss" scoped></style>

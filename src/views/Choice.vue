@@ -1,6 +1,17 @@
 <template>
     <div class="container">
         <SelectExam ref="selectExamRef" />
+        <el-dialog v-model="dialogVisible" title="编辑试卷" width="50%" :before-close="handleClose" align-center>
+            <ChoiceInput :question="state.current" ref="choiceInputRef" />
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="sumbitChange">
+                        确认
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
         <div class="left">
             <el-row justify="space-between">
                 <el-col :span="4">
@@ -73,7 +84,7 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="120" align="center">
                     <template #default="scope">
-                        <!-- <el-button link type="primary" size="small" @click="handleClick">Detail</el-button> -->
+                        <el-button link type="primary" size="small" @click="editQuestion(scope.row)">编辑</el-button>
                         <el-button link type="danger" size="small" @click="deleteQuestion(scope.row.url)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -112,6 +123,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useStore } from 'vuex';
 import SelectExam from '../components/SelectExam.vue';
+import ChoiceInput from '../components/ChoiceInput.vue';
 
 const tableRef = ref(null)
 
@@ -120,6 +132,7 @@ const router = useRouter()
 const state = reactive({
     info: [],
     selected: [],
+    current: null,
 })
 
 //获取题目信息
@@ -163,6 +176,35 @@ const clearFilter = () => {
 
 //删除题目
 const deleteQuestion = inject('deleteQuestion')
+
+//编辑题目
+const dialogVisible = ref(false)
+const handleClose = (done) => {
+    ElMessageBox.confirm(
+        '将不会保存修改，确定要关闭吗?',
+        'Warning',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '返回',
+            type: 'warning',
+        }
+    ).then(() => {
+        done()
+    }).catch(() => {
+        // catch error
+    })
+}
+const editQuestion = (row) => {
+    dialogVisible.value = true
+    console.log(row);
+    state.current = row
+}
+const choiceInputRef = ref(null)
+const sumbitChange = () => {
+    choiceInputRef.value.choiceFormSubmit()
+    window.location.reload()
+    dialogVisible.value = false
+}
 
 </script>
 
