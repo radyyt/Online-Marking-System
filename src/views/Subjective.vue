@@ -2,15 +2,7 @@
     <div class="container">
         <SelectExam ref="selectExamRef" />
         <el-dialog v-model="dialogVisible" title="编辑试卷" width="50%" :before-close="handleClose" align-center>
-            <SubjectiveInput :question="state.current" ref="subjectiveInputRef" />
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="sumbitChange">
-                        确认
-                    </el-button>
-                </span>
-            </template>
+            <SubjectiveInput :question="state.current" @cancelDialog="dialogVisible = false" />
         </el-dialog>
         <div class="left">
             <el-row justify="space-between">

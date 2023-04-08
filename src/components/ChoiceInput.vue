@@ -125,6 +125,7 @@ const saveImg = (pic) => {
     console.log(state.image)
 }
 
+const emits = defineEmits(['cancelDialog'])
 const choiceFormSubmit = () => {
     let formData = new FormData()
     const url = state.questionUrl
@@ -145,13 +146,11 @@ const choiceFormSubmit = () => {
                 axios.put(url, formData
                     , { headers: { 'Content-Type': 'multipart/form-data' }, baseURL: '' }).then(res => {
                         console.log(res)
-                        ElMessage({
-                            message: '题目录入成功！',
-                            type: 'success',
-                        })
+                        emits('cancelDialog')
+                        window.location.reload()
                     }, () => {
                         ElMessage({
-                            message: '题目录入失败！',
+                            message: '题目修改失败！',
                             type: 'error',
                         })
                     })
@@ -195,9 +194,6 @@ const handleQuestion = (q) => {
     state.questionUrl = q.url
 }
 handleQuestion(props.question)
-defineExpose({
-    choiceFormSubmit,
-})
 </script>
 
 <style lang="scss" scoped></style>

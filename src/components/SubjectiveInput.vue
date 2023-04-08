@@ -32,7 +32,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import axios from '../utils/axios'
-import { ElMessage,ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const store = useStore()
 const subjects = store.state.subjects
@@ -63,6 +63,7 @@ const saveImg = (pic) => {
     console.log(state.image)
 }
 
+const emits = defineEmits(['cancelDialog'])
 const subjectiveFormSubmit = () => {
     let formData = new FormData()
     formData.append("body", state.subjectiveForm.desc)
@@ -76,13 +77,11 @@ const subjectiveFormSubmit = () => {
                 axios.put(url, formData
                     , { headers: { 'Content-Type': 'multipart/form-data' }, baseURL: '' }).then(res => {
                         console.log(res)
-                        ElMessage({
-                            message: '题目录入成功！',
-                            type: 'success',
-                        })
+                        emits('cancelDialog')
+                        window.location.reload()
                     }, () => {
                         ElMessage({
-                            message: '题目录入失败！',
+                            message: '题目修改失败！',
                             type: 'error',
                         })
                     })
@@ -118,9 +117,6 @@ const handleQuestion = (q) => {
     state.questionUrl = q.url
 }
 handleQuestion(props.question)
-defineExpose({
-    subjectiveFormSubmit,
-})
 </script>
 
 <style lang="scss" scoped></style>
