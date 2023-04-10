@@ -23,34 +23,36 @@
         </el-row>
         <el-row>
             <div class="question-area">
-                <div v-if="currentQuestion != null">
-                    <h3>题目：</h3>
-                    <el-row>
-                        <div class="text">{{ currentQuestion.question_body }}</div>
-                    </el-row>
-                    <h3>正确答案：</h3>
-                    <el-row>
-                        <el-col>
-                            <p v-if="currentQuestion.question_type == 2"
-                                v-for="(item, index) in currentQuestion.correct.split(';')" class="text">
-                                空{{ index + 1 }} : {{ item }}</p>
-                            <p v-else class="text">
-                                {{ currentQuestion.correct }}
-                            </p>
-                        </el-col>
-                    </el-row>
-                    <h3>学生答案：</h3>
-                    <el-row>
-                        <el-col>
-                            <p v-if="currentQuestion.question_type == 2"
-                                v-for="(item, index) in currentQuestion.context.split(';')" class="text">
-                                空{{ index + 1 }} : {{ item }}</p>
-                            <p v-else class="text">
-                                {{ currentQuestion.context }}
-                            </p>
-                        </el-col>
-                    </el-row>
-                </div>
+                <el-scrollbar max-height="50vh">
+                    <div v-if="currentQuestion != null">
+                        <h3>题目：</h3>
+                        <el-row>
+                            <div class="text">{{ currentQuestion.question_body }}</div>
+                        </el-row>
+                        <h3>正确答案：</h3>
+                        <el-row>
+                            <el-col>
+                                <p v-if="currentQuestion.question_type == 2"
+                                    v-for="(item, index) in currentQuestion.correct.split(';')" class="text">
+                                    空{{ index + 1 }} : {{ item }}</p>
+                                <p v-else class="text">
+                                    {{ currentQuestion.correct }}
+                                </p>
+                            </el-col>
+                        </el-row>
+                        <h3>学生答案：</h3>
+                        <el-row>
+                            <el-col>
+                                <p v-if="currentQuestion.question_type == 2"
+                                    v-for="(item, index) in currentQuestion.context.split(';')" class="text">
+                                    空{{ index + 1 }} : {{ item }}</p>
+                                <p v-else class="text">
+                                    {{ currentQuestion.context }}
+                                </p>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-scrollbar>
             </div>
             <div class="mark-area">
                 <el-row>
@@ -194,6 +196,7 @@ const handleChange = () => {
 <style lang="scss" scoped>
 .question-area {
     background-color: #F2F3F5;
+    padding: 15px;
 
     margin: {
         left: 5vw;
@@ -237,7 +240,7 @@ const handleChange = () => {
 }
 
 .text {
-    font-size: 20px;
+    font-size: 15px;
     margin-left: 40px;
 }
 </style>

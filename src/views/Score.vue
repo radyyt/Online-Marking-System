@@ -28,18 +28,20 @@
                 </el-form>
             </el-col>
         </el-row>
-        <el-row>
-            <el-table :data="state.studentAnswer">
-                <el-table-column type="index" />
-                <el-table-column prop="question_body" label="题目" />
-                <el-table-column prop="score" label="得分" width="180" />
-                <el-table-column fixed="right" label="操作" width="120" align="center">
-                    <template #default="scope">
-                        <el-button link type="primary" size="small" @click="editScore(scope.row)">编辑</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-row>
+        <el-scrollbar max-height="80vh">
+            <el-row>
+                <el-table :data="state.studentAnswer">
+                    <el-table-column type="index" />
+                    <el-table-column prop="question_body" label="题目" />
+                    <el-table-column prop="score" label="得分" width="180" />
+                    <el-table-column fixed="right" label="操作" width="120" align="center">
+                        <template #default="scope">
+                            <el-button link type="primary" size="small" @click="editScore(scope.row)">编辑</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-row>
+        </el-scrollbar>
     </div>
     <el-dialog v-model="dialogVisible" title="编辑分数" width="30%" align-center>
         <el-input-number v-model="score" :min="0" size="large" />
@@ -55,7 +57,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { inject, reactive, ref } from 'vue';
 import axios from '../utils/axios';
 import { ElMessage } from 'element-plus';
 
@@ -117,6 +119,7 @@ const editScore = (row) => {
     current.value = row
 }
 
+const reload = inject('reload')
 const submitBtn = () => {
     console.log(current.value);
     console.log(score.value);
@@ -136,6 +139,7 @@ const submitBtn = () => {
     // })
     // saveSelectedExamId(examId)
     dialogVisible.value = false
+    reload()
 }
 </script>
 
