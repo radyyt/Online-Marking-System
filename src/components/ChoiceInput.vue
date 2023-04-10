@@ -180,6 +180,7 @@ const reset = (formRef) => {
 }
 
 const props = defineProps(['question'])
+
 //修改问题页面处理
 const handleQuestion = (q) => {
     const form = state.choiceForm
@@ -193,7 +194,11 @@ const handleQuestion = (q) => {
     form.type = q.type
     state.questionUrl = q.url
 }
-handleQuestion(props.question)
+console.log(props);
+if (props.question != undefined) {
+    handleQuestion(props.question)
+}
+
 </script>
 
 <style lang="scss" scoped></style>
