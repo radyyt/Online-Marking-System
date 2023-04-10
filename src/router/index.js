@@ -10,6 +10,7 @@ const routes = [
   { path: '/exams/manage', name: 'examsManage', component: () => import('../views/ExamsManage.vue') },
   { path: '/exams/detail/:examId', name: 'examDetail', component: () => import('../components/ExamDetail.vue') },
   { path: '/mark', name: 'mark', component: () => import('../views/Mark.vue') },
+  { path: '/score', name: 'score', component: () => import('../views/Score.vue') },
   { path: '/:pathMatch(.*)', component: () => import('../views/NotFound.vue') }
 ]
 

@@ -134,7 +134,7 @@ const examChange = () => {
     //获取问题的id
     axios.get('exam-question/', { params: { exam: examId } }).then(res => {
         state.questionId.list = res.data.filter(item => item.type == 2 || item.type == 3).map(item => item.question_id)
-        console.log(res.data.filter(item => item.type == 2 || item.type == 3).map(item => item.question_id));
+        console.log(state.filteredExams.find(item => item.exam.id = state.selectForm.examId));
         axios.get('answer/', { params: { question_id: state.questionId.list[0] } }).then(res => {
             state.answers.list = res.data
             currentQuestion.value = res.data[0]

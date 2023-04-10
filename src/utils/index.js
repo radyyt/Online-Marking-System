@@ -8,4 +8,5 @@ export const pathMap = {
     blankQuestion: '填空题',
     examDetail: '试卷详情',
     mark: '试卷批改',
+    score: '成绩管理'
 }
