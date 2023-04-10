@@ -84,7 +84,7 @@
 import axios from '../utils/axios';
 import { reactive, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { useStore } from 'vuex';
 import SelectExam from '../components/SelectExam.vue';
 import SubjectiveInput from '../components/SubjectiveInput.vue';

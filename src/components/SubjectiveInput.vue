@@ -116,7 +116,9 @@ const handleQuestion = (q) => {
     form.answer = q.correct_answer
     state.questionUrl = q.url
 }
-handleQuestion(props.question)
+if (props.question != undefined) {
+    handleQuestion(props.question)
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -146,10 +146,9 @@ const handleQuestion = (q) => {
     }
     state.questionUrl = q.url
 }
-handleQuestion(props.question)
-defineExpose({
-    blankFormSubmit,
-})
+if (props.question != undefined) {
+    handleQuestion(props.question)
+}
 </script>
 
 <style lang="scss" scoped></style>
