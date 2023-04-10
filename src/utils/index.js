@@ -7,4 +7,5 @@ export const pathMap = {
     subjectiveQuestion: '主观题',
     blankQuestion: '填空题',
     examDetail: '试卷详情',
+    mark: '试卷批改',
 }

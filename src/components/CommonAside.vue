@@ -46,9 +46,9 @@
                     </el-icon>
                     <span class="menu-title">试卷管理</span>
                 </el-menu-item>
-                <el-menu-item index="/scores/correct">
+                <el-menu-item index="/mark">
                     <el-icon>
-                        <DocumentAdd />
+                        <FolderChecked />
                     </el-icon>
                     <span class="menu-title">试卷批改</span>
                 </el-menu-item>
