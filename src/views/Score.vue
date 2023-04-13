@@ -33,7 +33,7 @@
                 <el-table :data="state.studentAnswer">
                     <el-table-column type="index" />
                     <el-table-column prop="question_body" label="题目" />
-                    <el-table-column prop="score" label="得分" width="180" />
+                    <el-table-column prop="score" label="得分" width="70" />
                     <el-table-column fixed="right" label="操作" width="120" align="center">
                         <template #default="scope">
                             <el-button link type="primary" size="small" @click="editScore(scope.row)">编辑</el-button>
