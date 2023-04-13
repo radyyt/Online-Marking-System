@@ -14,9 +14,9 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item command="profile">个人中心</el-dropdown-item>
-                        <el-dropdown-item>Action 2</el-dropdown-item>
+                        <!-- <el-dropdown-item>Action 2</el-dropdown-item>
                         <el-dropdown-item>Action 3</el-dropdown-item>
-                        <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                        <el-dropdown-item disabled>Action 4</el-dropdown-item> -->
                         <el-dropdown-item command="quit" divided>退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -66,6 +66,9 @@ const event = (command) => {
             console.log('cancel')
         })
 
+    }
+    else if (command == 'profile') {
+        router.push({ path: '/profile' })
     }
 }
 
