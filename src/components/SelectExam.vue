@@ -44,7 +44,6 @@ defineExpose({
 //从后端获取试卷信息
 axios.get('exam/').then((res) => {
     state.info = res.data
-    console.log(state.info);
 })
 
 const subjects = store.state.subjects
@@ -52,7 +51,6 @@ const selected = computed(() => store.state.selected)
 const saveSelectedExamId = (payload) => { store.commit('saveSelectedExamId', payload) }
 
 const submitBtn = () => {
-    console.log(selected.value);
     const examId = filteredExams.value.find(item => item.title === state.selectedTitle).id
     const questions = selected.value.map(({ type, url, id }) => ({ type, question_url: url, exam: examId, question_id: id }))
     axios.post('exam-question/', questions).then(() => {
