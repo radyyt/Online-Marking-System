@@ -10,4 +10,5 @@ export const pathMap = {
     mark: '试卷批改',
     score: '成绩管理',
     profile: '用户信息',
+    chart: '成绩分析',
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="0">
-            <el-col :span="24" :offset="0">
+            <el-col :span="12" :offset="0">
                 <el-form :model="state.selectForm" ref="selectFormRef" :inline="true" size="default">
                     <el-form-item>
                         <el-select v-model="state.selectForm.classId" placeholder="请选择班级" clearable filterable
@@ -18,22 +18,23 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item>
+                    <!-- <el-form-item>
                         <el-select v-model="state.selectForm.studentId" placeholder="请选择学生" clearable filterable
                             @change="studentChange">
                             <el-option v-for="item in state.students" :key="item.id" :label="item.name" :value="item.id">
                             </el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
             </el-col>
         </el-row>
         <el-scrollbar max-height="80vh">
             <el-row>
-                <el-table :data="state.studentAnswer">
-                    <el-table-column type="index" />
-                    <el-table-column prop="question_body" label="题目" />
-                    <el-table-column prop="score" label="得分" width="70" />
+                <el-table :data="state.students">
+                    <!-- <el-table-column type="index" /> -->
+                    <el-table-column prop="student_id" label="学号" />
+                    <el-table-column prop="name" label="姓名" />
+                    <el-table-column prop="current_score.score" label="得分" />
                     <el-table-column fixed="right" label="操作" width="120" align="center">
                         <template #default="scope">
                             <el-button link type="primary" size="small" @click="editScore(scope.row)">编辑</el-button>
@@ -57,7 +58,7 @@
 </template>
 
 <script setup>
-import { inject, reactive, ref } from 'vue';
+import { inject, nextTick, reactive, ref } from 'vue';
 import axios from '../utils/axios';
 import { ElMessage } from 'element-plus';
 
@@ -90,14 +91,21 @@ const classChange = () => {
     state.selectForm.studentId = undefined
     let classId = state.selectForm.classId
     state.filteredExams = state.exams.filter(item => item.classes.id === state.selectForm.classId)
+    // console.log(state.filteredExams);
+
+    //获取该班所有学生
     axios.get('student/', { params: { classes: classId } }).then(res => {
         state.students = res.data
-        console.log(state.students);
     })
 }
 
 const examChange = () => {
     state.selectedExam = state.filteredExams.find(item => item.exam.id = state.selectForm.examId).exam
+
+    // 获取所有学生的该试卷成绩
+    state.students.forEach(item => {
+        item.current_score = item.scores.find(item => item.title == state.selectedExam.title)
+    })
 }
 
 const studentChange = () => {
@@ -109,37 +117,34 @@ const studentChange = () => {
     })
 }
 
-//编辑分数功能
+//编辑试卷分数功能
 const dialogVisible = ref(false)
-const score = ref(0)
-const current = ref(null)
+// const score = ref(0)
+let score = 0
+let current = null
 
 const editScore = (row) => {
     dialogVisible.value = true
-    current.value = row
+    score = row.current_score.score
+    current = row
+    // console.log(current);
 }
 
-const reload = inject('reload')
 const submitBtn = () => {
-    console.log(current.value);
-    console.log(score.value);
-    let url = current.value.url
-    axios.patch(url, { score: score.value }, { baseURL: '' }).then(res => {
-        console.log(res.data);
+    //获取到当前学生的url和scores
+    let url = current.url
+    let scores = current.scores
+    // 将新的值放入scores数组中
+    let index = scores.findIndex(item => item.title == current.current_score.title)
+    scores[index].score = score
+    // 发送到后端修改
+    axios.patch(url, { scores: scores }, { baseURL: '' }).then(res => {
+        // console.log(res.data);
         ElMessage({ message: '修改成功', type: 'success' })
     }, () => {
         ElMessage({ message: '修改失败', type: 'error' })
     })
-    // const examId = filteredExams.value.find(item => item.title === state.selectedTitle).id
-    // const questions = selected.value.map(({ type, url, id }) => ({ type, question_url: url, exam: examId, question_id: id }))
-    // axios.post('exam-question/', questions).then(() => {
-    //     ElMessage({ message: '已提交至试卷:' + state.selectedTitle, type: 'success' })
-    // }, () => {
-    //     ElMessage({ message: '提交至试卷失败', type: 'error' })
-    // })
-    // saveSelectedExamId(examId)
     dialogVisible.value = false
-    reload()
 }
 </script>
 

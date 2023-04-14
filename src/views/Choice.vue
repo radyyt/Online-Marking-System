@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <SelectExam ref="selectExamRef" />
-        <el-dialog v-model="dialogVisible" title="编辑试卷" width="50%" :before-close="handleClose" align-center>
+        <el-dialog v-model="dialogVisible" title="编辑题目" width="50%" :before-close="handleClose" align-center>
             <ChoiceInput :question="state.current" @cancelDialog="dialogVisible = false" />
         </el-dialog>
         <div class="left">

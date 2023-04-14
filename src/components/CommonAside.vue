@@ -58,12 +58,12 @@
                     </el-icon>
                     <span class="menu-title">成绩管理</span>
                 </el-menu-item>
-                <!-- <el-menu-item index="/score/analysis">
+                <el-menu-item index="/chart">
                     <el-icon>
                         <DataAnalysis />
                     </el-icon>
                     <span class="menu-title">成绩分析</span>
-                </el-menu-item> -->
+                </el-menu-item>
             </el-menu>
         </div>
     </div>

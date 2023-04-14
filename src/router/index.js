@@ -12,6 +12,7 @@ const routes = [
   { path: '/exams/detail/:examId', name: 'examDetail', component: () => import('../components/ExamDetail.vue') },
   { path: '/mark', name: 'mark', component: () => import('../views/Mark.vue') },
   { path: '/score', name: 'score', component: () => import('../views/Score.vue') },
+  { path: '/chart', name: 'chart', component: () => import('../views/Chart.vue') },
   { path: '/:pathMatch(.*)', component: () => import('../views/NotFound.vue') }
 ]
 
