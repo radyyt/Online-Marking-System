@@ -30,17 +30,33 @@
         </el-row>
         <el-scrollbar max-height="80vh">
             <el-row>
-                <el-table :data="state.students">
-                    <!-- <el-table-column type="index" /> -->
-                    <el-table-column prop="student_id" label="学号" />
-                    <el-table-column prop="name" label="姓名" />
-                    <el-table-column prop="current_score.score" label="得分" />
-                    <el-table-column fixed="right" label="操作" width="120" align="center">
-                        <template #default="scope">
-                            <el-button link type="primary" size="small" @click="editScore(scope.row)">编辑</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <el-col :span="6">
+                    <el-table :data="state.students" highlight-current-row @current-change="handleCurrentChange">
+                        <!-- <el-table-column type="index" /> -->
+                        <el-table-column prop="student_id" label="学号" />
+                        <el-table-column prop="name" label="姓名" />
+                        <el-table-column prop="current_score.score" label="得分" width="70" />
+                        <el-table-column fixed="right" label="操作" width="100" align="center">
+                            <template #default="scope">
+                                <el-button link type="primary" size="small" @click="editExamScore(scope.row)">编辑</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-col>
+                <el-col :span="17" :offset="1">
+                    <el-table :data="state.studentAnswer">
+                        <!-- <el-table-column type="index" /> -->
+                        <el-table-column prop="question_body" label="题目" />
+                        <el-table-column prop="context" label="学生答案" width="300" />
+                        <el-table-column prop="score" label="得分" width="70" />
+                        <el-table-column fixed="right" label="操作" width="100" align="center">
+                            <template #default="scope">
+                                <el-button link type="primary" size="small"
+                                    @click="editAnswerScore(scope.row)">编辑</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-col>
             </el-row>
         </el-scrollbar>
     </div>
@@ -60,7 +76,7 @@
 <script setup>
 import { inject, nextTick, reactive, ref } from 'vue';
 import axios from '../utils/axios';
-import { ElMessage } from 'element-plus';
+import { ElMessage, colorPickerContextKey } from 'element-plus';
 
 const state = reactive({
     classes: [],
@@ -108,43 +124,64 @@ const examChange = () => {
     })
 }
 
-const studentChange = () => {
-    let studentId = state.selectForm.studentId
-    let examId = state.selectForm.examId
-    axios.get('answer/', { params: { student: studentId, exam: examId } }).then(res => {
-        state.studentAnswer = res.data
-        console.log(state.studentAnswer);
-    })
-}
 
-//编辑试卷分数功能
 const dialogVisible = ref(false)
-// const score = ref(0)
 let score = 0
 let current = null
 
-const editScore = (row) => {
+//编辑试卷分数功能
+const editExamScore = (row) => {
     dialogVisible.value = true
     score = row.current_score.score
     current = row
-    // console.log(current);
+    current.flag = 0
+}
+
+//编辑题目分数功能
+const editAnswerScore = (row) => {
+    console.log(row);
+    dialogVisible.value = true
+    score = row.score
+    current = row
+    current.flag = 1
 }
 
 const submitBtn = () => {
-    //获取到当前学生的url和scores
     let url = current.url
-    let scores = current.scores
-    // 将新的值放入scores数组中
-    let index = scores.findIndex(item => item.title == current.current_score.title)
-    scores[index].score = score
-    // 发送到后端修改
-    axios.patch(url, { scores: scores }, { baseURL: '' }).then(res => {
-        // console.log(res.data);
-        ElMessage({ message: '修改成功', type: 'success' })
-    }, () => {
-        ElMessage({ message: '修改失败', type: 'error' })
-    })
+    if (current.flag == 0) {
+        //获取到当前学生的url和scores
+        let scores = current.scores
+        // 将新的值放入scores数组中
+        let index = scores.findIndex(item => item.title == current.current_score.title)
+        scores[index].score = score
+        // 发送到后端修改
+        axios.patch(url, { scores: scores }, { baseURL: '' }).then(res => {
+            // console.log(res.data);
+            ElMessage({ message: '修改成功', type: 'success' })
+        }, () => {
+            ElMessage({ message: '修改失败', type: 'error' })
+        })
+    } else {
+        current.score = score
+        axios.patch(url, { score: score }, { baseURL: '' }).then(res => {
+            console.log(res.data);
+            ElMessage({ message: '修改成功', type: 'success' })
+        }, () => {
+            ElMessage({ message: '修改失败', type: 'error' })
+        })
+    }
     dialogVisible.value = false
+}
+
+//试卷分数详情
+const handleCurrentChange = (currentRow) => {
+    //获取当前学生的回答和得分
+    let studentId = currentRow.id
+    let examId = state.selectForm.examId
+    axios.get('answer/', { params: { student: studentId, exam: examId } }).then(res => {
+        state.studentAnswer = res.data
+        // console.log(state.studentAnswer);
+    })
 }
 </script>
 
