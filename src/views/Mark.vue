@@ -56,7 +56,15 @@
             </div>
             <div class="mark-area">
                 <el-row>
-                    <el-col :span="3">
+                    <el-col :span="2">
+                        <h2>分值：</h2>
+                    </el-col>
+                    <el-col :span="5" v-if="currentQuestion != null">
+                        <h2>{{ currentQuestion.full_score }}</h2>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="2">
                         <h2>得分：</h2>
                     </el-col>
                     <el-col :span="5">
@@ -135,11 +143,13 @@ const examChange = () => {
 
     //获取问题的id
     axios.get('exam-question/', { params: { exam: examId } }).then(res => {
-        state.questionId.list = res.data.filter(item => item.type == 2 || item.type == 3).map(item => item.question_id)
-        console.log(state.filteredExams.find(item => item.exam.id = state.selectForm.examId));
-        axios.get('answer/', { params: { question_id: state.questionId.list[0] } }).then(res => {
+        state.questionId.list = res.data.filter(item => item.type == 2 || item.type == 3).map((item) => { return { id: item.question_id, score: item.score } })
+        // console.log(state.filteredExams.find(item => item.exam.id = state.selectForm.examId));
+        axios.get('answer/', { params: { question_id: state.questionId.list[0].id } }).then(res => {
             state.answers.list = res.data
             currentQuestion.value = res.data[0]
+            currentQuestion.value.full_score = state.questionId.list[0].score
+            // console.log(currentQuestion.value);
         })
     })
 }
@@ -150,19 +160,21 @@ const prevQuestion = () => {
     state.answers.list = []
     state.answers.currentIndex = 0
     state.questionId.currentIndex = state.questionId.currentIndex - 1
-    axios.get('answer/', { params: { question_id: state.questionId.list[state.questionId.currentIndex] } }).then(res => {
+    axios.get('answer/', { params: { question_id: state.questionId.list[state.questionId.currentIndex].id } }).then(res => {
         state.answers.list = res.data
         currentQuestion.value = res.data[0]
+        currentQuestion.value.full_score = state.questionId.list[state.questionId.currentIndex].score
     })
 }
 const nextQuestion = () => {
     state.answers.list = []
     state.answers.currentIndex = 0
     state.questionId.currentIndex = state.questionId.currentIndex + 1
-    axios.get('answer/', { params: { question_id: state.questionId.list[state.questionId.currentIndex] } }).then(res => {
+    axios.get('answer/', { params: { question_id: state.questionId.list[state.questionId.currentIndex].id } }).then(res => {
         state.answers.list = res.data
         console.log(state.answers.list)
         currentQuestion.value = res.data[0]
+        currentQuestion.value.full_score = state.questionId.list[state.questionId.currentIndex].score
     })
 }
 
@@ -229,7 +241,7 @@ const handleChange = () => {
 
     h2 {
         margin-left: 20px;
-        margin-top: 0px;
+        margin-top: 3px;
     }
 
     .el-col {

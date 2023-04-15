@@ -5,7 +5,8 @@
             <el-table :data="state.singleChoices" style="width: 100%">
                 <el-table-column type="index" />
                 <el-table-column prop="body" label="题目" />
-                <el-table-column width="130">
+                <el-table-column prop="score" label="分值" width="80" />
+                <el-table-column width="130" label="操作">
                     <template #default="scope">
                         <el-popconfirm title="确定要删除吗?" @confirm="deleteConfirm(scope.row)">
                             <template #reference>
@@ -19,7 +20,8 @@
             <el-table :data="state.mutipleChoices" style="width: 100%">
                 <el-table-column type="index" />
                 <el-table-column prop="body" label="题目" />
-                <el-table-column width="130">
+                <el-table-column prop="score" label="分值" width="80" />
+                <el-table-column width="130" label="操作">
                     <template #default="scope">
                         <el-popconfirm title="确定要删除吗?" @confirm="deleteConfirm(scope.row)">
                             <template #reference>
@@ -33,7 +35,8 @@
             <el-table :data="state.blanks" style="width: 100%">
                 <el-table-column type="index" />
                 <el-table-column prop="body" label="题目" />
-                <el-table-column width="130">
+                <el-table-column prop="score" label="分值" width="80" />
+                <el-table-column width="130" label="操作">
                     <template #default="scope">
                         <el-popconfirm title="确定要删除吗?" @confirm="deleteConfirm(scope.row)">
                             <template #reference>
@@ -47,7 +50,8 @@
             <el-table :data="state.subjectives" style="width: 100%">
                 <el-table-column type="index" />
                 <el-table-column prop="body" label="题目" />
-                <el-table-column width="130">
+                <el-table-column prop="score" label="分值" width="80" />
+                <el-table-column width="130" label="操作">
                     <template #default="scope">
                         <el-popconfirm title="确定要删除吗?" @confirm="deleteConfirm(scope.row)">
                             <template #reference>
@@ -83,6 +87,7 @@ axios.get('exam-question/', { params: { exam: examId } }).then(res => {
     for (const item of questions) {
         axios.get(item.question_url, { baseURL: '' }).then(res => {
             const data = res.data
+            data.score = item.score
             if (data.type_name == '单项选择') {
                 state.singleChoices.push(data)
             } else if (data.type_name == '多项选择') {
@@ -94,6 +99,7 @@ axios.get('exam-question/', { params: { exam: examId } }).then(res => {
             }
         })
     }
+    // console.log(state)
 })
 
 //删除题目
