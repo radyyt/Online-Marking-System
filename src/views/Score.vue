@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="0">
-            <el-col :span="12" :offset="0">
+            <el-col :span="7" :offset="0">
                 <el-form :model="state.selectForm" ref="selectFormRef" :inline="true" size="default">
                     <el-form-item>
                         <el-select v-model="state.selectForm.classId" placeholder="请选择班级" clearable filterable
@@ -27,6 +27,10 @@
                     </el-form-item> -->
                 </el-form>
             </el-col>
+            <el-col :span="1">
+                <el-button type="primary" size="default" @click="gotoChart">成绩分析</el-button>
+
+            </el-col>
         </el-row>
         <el-scrollbar max-height="80vh">
             <el-row>
@@ -47,7 +51,8 @@
                     <el-table :data="state.studentAnswer">
                         <!-- <el-table-column type="index" /> -->
                         <el-table-column prop="question_body" label="题目" />
-                        <el-table-column prop="context" label="学生答案" width="300" />
+                        <!-- <el-table-column prop="context" label="学生答案" width="120" />
+                        <el-table-column prop="correct" label="正确答案" width="150" /> -->
                         <el-table-column prop="score" label="得分" width="70" />
                         <el-table-column fixed="right" label="操作" width="100" align="center">
                             <template #default="scope">
@@ -77,6 +82,7 @@
 import { inject, nextTick, reactive, ref } from 'vue';
 import axios from '../utils/axios';
 import { ElMessage, colorPickerContextKey } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 const state = reactive({
     classes: [],
@@ -182,6 +188,12 @@ const handleCurrentChange = (currentRow) => {
         state.studentAnswer = res.data
         // console.log(state.studentAnswer);
     })
+}
+
+//跳转到成绩分析页面
+const router = useRouter()
+const gotoChart = () => {
+    router.push({ name: 'chart', params: { class: state.selectForm.classId, exam: state.selectForm.examId } })
 }
 </script>
 
