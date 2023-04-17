@@ -39,8 +39,8 @@ use([
 ]);
 
 const route = useRoute()
-const examId = route.params.exam
-const classId = route.params.class
+let examId = route.params.exam
+let classId = route.params.class
 
 const state = reactive({
     info: {
@@ -53,8 +53,12 @@ const state = reactive({
 
 //获取班级名
 axios.get('class/' + classId + '/').then(res => {
-    // console.log(res.data);
     state.info.className = res.data.name
+})
+
+//获取试卷名
+axios.get('exam/' + examId + '/').then(res => {
+    state.info.examName = res.data.title
 })
 
 //获取所有学生信息
@@ -102,6 +106,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
 //试卷详细题目得分率
 const examOption = ref(null)
 axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(res => {
+    console.log(res.data);
     let url = res.data[0].url
     axios.get(url + 'score-rate/', { baseURL: '' }).then(res => {
         let indexes = []

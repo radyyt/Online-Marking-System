@@ -81,7 +81,7 @@
 <script setup>
 import { inject, nextTick, reactive, ref } from 'vue';
 import axios from '../utils/axios';
-import { ElMessage, colorPickerContextKey } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
 const state = reactive({
@@ -122,11 +122,10 @@ const classChange = () => {
 }
 
 const examChange = () => {
-    state.selectedExam = state.filteredExams.find(item => item.exam.id = state.selectForm.examId).exam
-
+    state.selectedExam = state.filteredExams.find(item => item.exam.id == state.selectForm.examId).exam
     // 获取所有学生的该试卷成绩
     state.students.forEach(item => {
-        item.current_score = item.scores.find(item => item.title == state.selectedExam.title)
+        item.current_score = item.scores.find(item => item.title == state.selectedExam.title) || -1
     })
 }
 
@@ -153,13 +152,23 @@ const editAnswerScore = (row) => {
 }
 
 const submitBtn = () => {
+    console.log(current);
     let url = current.url
     if (current.flag == 0) {
         //获取到当前学生的url和scores
         let scores = current.scores
-        // 将新的值放入scores数组中
-        let index = scores.findIndex(item => item.title == current.current_score.title)
-        scores[index].score = score
+        if (current.current_score == -1) {
+            let item = {
+                title: state.selectedExam.title,
+                score: score
+            }
+            scores.push(item)
+        } else {
+            // 将新的值放入scores数组中
+            let index = scores.findIndex(item => item.title == current.current_score.title)
+            scores[index].score = score
+        }
+
         // 发送到后端修改
         axios.patch(url, { scores: scores }, { baseURL: '' }).then(res => {
             // console.log(res.data);

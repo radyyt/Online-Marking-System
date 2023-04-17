@@ -138,7 +138,7 @@ const classChange = () => {
 }
 
 const examChange = () => {
-    state.selectedExam = state.filteredExams.find(item => item.exam.id = state.selectForm.examId).exam
+    state.selectedExam = state.filteredExams.find(item => item.exam.id == state.selectForm.examId).exam
     const examId = state.selectedExam.id
 
     //获取问题的id
