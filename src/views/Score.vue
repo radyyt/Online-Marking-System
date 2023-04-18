@@ -34,20 +34,22 @@
         </el-row>
         <el-scrollbar max-height="80vh">
             <el-row>
-                <el-col :span="6">
+                <el-col :span="7">
                     <el-table :data="state.students" highlight-current-row @current-change="handleCurrentChange">
                         <!-- <el-table-column type="index" /> -->
                         <el-table-column prop="student_id" label="学号" />
                         <el-table-column prop="name" label="姓名" />
                         <el-table-column prop="current_score.score" label="得分" width="70" />
-                        <el-table-column fixed="right" label="操作" width="100" align="center">
+                        <el-table-column fixed="right" label="操作" width="130" align="center">
                             <template #default="scope">
+                                <el-button link type="primary" size="small"
+                                    @click="studentChart(scope.row)">历史成绩</el-button>
                                 <el-button link type="primary" size="small" @click="editExamScore(scope.row)">编辑</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </el-col>
-                <el-col :span="17" :offset="1">
+                <el-col :span="16" :offset="1">
                     <el-table :data="state.studentAnswer">
                         <!-- <el-table-column type="index" /> -->
                         <el-table-column prop="question_body" label="题目" />
@@ -76,6 +78,9 @@
             </span>
         </template>
     </el-dialog>
+    <el-drawer v-model="drawer" title="历史成绩折线图" direction="btt" size="50%" :key="drawerKey">
+        <GradeHistory :scores="state.stuScores" />
+    </el-drawer>
 </template>
 
 <script setup>
@@ -83,6 +88,7 @@ import { inject, nextTick, reactive, ref } from 'vue';
 import axios from '../utils/axios';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
+import GradeHistory from '../components/GradeHistory.vue';
 
 const state = reactive({
     classes: [],
@@ -96,6 +102,7 @@ const state = reactive({
     studentAnswer: [],
     filteredExams: [],
     selectedExam: null,
+    stuScores: [],
 })
 
 //获取班级信息
@@ -203,6 +210,16 @@ const handleCurrentChange = (currentRow) => {
 const router = useRouter()
 const gotoChart = () => {
     router.push({ name: 'chart', params: { class: state.selectForm.classId, exam: state.selectForm.examId } })
+}
+
+//跳转到学生成绩分析页面
+const drawerKey = ref(0)
+const drawer = ref(false)
+const studentChart = (row) => {
+    drawer.value = true
+    state.stuScores = row.scores
+    drawerKey.value++
+    console.log(state.stuScores);
 }
 </script>
 

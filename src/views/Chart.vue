@@ -2,12 +2,10 @@
     <h4 class="title">当前试卷: {{ state.info.className }}-{{ state.info.examName }}</h4>
     <div>
         <el-row>
-            <el-col :span="6">
-                <v-chart class="chart" :option="classOption" />
-            </el-col>
-            <el-col :span="18">
-                <v-chart :option="examOption" style="height: 30vh;width: 70vw;" />
-            </el-col>
+            <v-chart class="chart" :option="classOption" />
+        </el-row>
+        <el-row>
+            <v-chart :option="examOption" style="height: 30vh;width: 70vw;" />
         </el-row>
     </div>
 </template>
