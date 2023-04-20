@@ -148,6 +148,10 @@ const choiceFormSubmit = () => {
                         console.log(res)
                         emits('cancelDialog')
                         window.location.reload()
+                        ElMessage({
+                            message: '题目修改成功！',
+                            type: 'success',
+                        })
                     }, () => {
                         ElMessage({
                             message: '题目修改失败！',
