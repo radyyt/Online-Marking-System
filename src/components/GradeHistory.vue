@@ -7,7 +7,7 @@
 <script setup>
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { LineChart } from 'echarts/charts';
+import { LineChart, BarChart } from 'echarts/charts';
 import {
     TitleComponent,
     TooltipComponent,
@@ -20,6 +20,7 @@ import { ref } from 'vue';
 use([
     CanvasRenderer,
     LineChart,
+    BarChart,
     TitleComponent,
     TooltipComponent,
     LegendComponent,
@@ -38,12 +39,12 @@ const gradeOption = ref({
     yAxis: {},
     tooltip: {
         trigger: 'item',
-        formatter: '{c} 分',
+        formatter: '{b}: {c}分',
     },
     series: [
         {
             data: scores,
-            type: 'line',
+            type: 'bar',
             smooth: true,
         }
     ]

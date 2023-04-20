@@ -2,10 +2,15 @@
     <h4 class="title">当前试卷: {{ state.info.className }}-{{ state.info.examName }}</h4>
     <div>
         <el-row>
-            <v-chart class="chart" :option="classOption" />
+            <el-col :span="6">
+                <v-chart class="chart" :option="classOption" />
+            </el-col>
+            <el-col :span="18">
+                <v-chart :option="generalOption" style="height: 30vh;width: 70vw;" @click="showDetailChart" />
+            </el-col>
         </el-row>
         <el-row>
-            <v-chart :option="examOption" style="height: 30vh;width: 70vw;" />
+            <v-chart :option="detailOption" style="height: 30vh;width: 80vw;" />
         </el-row>
     </div>
 </template>
@@ -85,6 +90,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
                 {
                     name: '全班成绩',
                     type: 'pie',
+                    // roseType:'radious',
                     radius: '60%',
                     center: ['37%', '50%'],
                     data: grades,
@@ -102,28 +108,31 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
 })
 
 //试卷详细题目得分率
-const examOption = ref(null)
+const generalOption = ref(null)
+const detailOption = ref(null)
+let rates = null
 axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(res => {
-    console.log(res.data);
     let url = res.data[0].url
     axios.get(url + 'score-rate/', { baseURL: '' }).then(res => {
-        let indexes = []
-        let rates = JSON.parse(res.data)
-        for (let i = 0; i < rates.length; i++) {
-            indexes.push(i + 1);
+        rates = JSON.parse(res.data)
+        console.log(rates);
+        let generalData = []
+        let types = ['single', 'multiple', 'blank', 'subjective']
+        for (let type of types) {
+            generalData.push((rates[type].reduce((accumulator, currentValue) => accumulator + currentValue)) / rates[type].length)
         }
-        console.log(indexes);
-        examOption.value = {
+        console.log(generalData);
+        generalOption.value = {
             title: {
-                text: '题目得分率',
+                text: '大题得分率',
                 left: 'left',
             },
             tooltip: {
                 trigger: 'item',
-                formatter: '第{b}题得分率:  {c} %',
+                formatter: '{b} 得分率:  {c} %',
             },
             xAxis: {
-                data: indexes
+                data: ['单项选择', '多项选择', '填空题', '主观题']
             },
             yAxis: {
                 axisLabel: {
@@ -134,7 +143,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
                 {
                     name: '得分率',
                     type: 'bar',
-                    data: rates,
+                    data: generalData,
                     colorBy: 'data',
                     emphasis: {
                         itemStyle: {
@@ -146,9 +155,62 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
                 }
             ]
         }
+
     })
 })
 
+const showDetailChart = (params) => {
+    const name = params.name
+    console.log(rates);
+    let data = []
+    if (name == '单项选择') {
+        data = rates.single
+    } else if (name == '多项选择') {
+        data = rates.multiple
+    } else if (name == '填空题') {
+        data = rates.blank
+    } else {
+        data = rates.subjective
+    }
+    console.log(data);
+    let indexes = []
+    for (let i = 0; i < data.length; i++) {
+        indexes.push(i + 1)
+    }
+    detailOption.value = {
+        title: {
+            text: '题目得分率',
+            left: 'left',
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '第{b}题得分率:  {c} %',
+        },
+        xAxis: {
+            data: indexes
+        },
+        yAxis: {
+            axisLabel: {
+                formatter: '{value}%'
+            },
+        },
+        series: [
+            {
+                name: '得分率',
+                type: 'bar',
+                data: data,
+                colorBy: 'data',
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                    },
+                },
+            }
+        ]
+    }
+}
 </script>
 
 <style lang="scss" scoped>

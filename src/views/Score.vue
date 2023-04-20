@@ -35,19 +35,22 @@
         <el-scrollbar max-height="80vh">
             <el-row>
                 <el-col :span="7">
-                    <el-table :data="state.students" highlight-current-row @current-change="handleCurrentChange">
-                        <!-- <el-table-column type="index" /> -->
-                        <el-table-column prop="student_id" label="学号" />
-                        <el-table-column prop="name" label="姓名" />
-                        <el-table-column prop="current_score.score" label="得分" width="70" />
-                        <el-table-column fixed="right" label="操作" width="130" align="center">
-                            <template #default="scope">
-                                <el-button link type="primary" size="small"
-                                    @click="studentChart(scope.row)">历史成绩</el-button>
-                                <el-button link type="primary" size="small" @click="editExamScore(scope.row)">编辑</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <el-scrollbar max-height="80vh">
+                        <el-table :data="state.students" highlight-current-row @current-change="handleCurrentChange">
+                            <!-- <el-table-column type="index" /> -->
+                            <el-table-column prop="student_id" label="学号" />
+                            <el-table-column prop="name" label="姓名" />
+                            <el-table-column prop="current_score.score" label="得分" width="70" />
+                            <el-table-column fixed="right" label="操作" width="130" align="center">
+                                <template #default="scope">
+                                    <el-button link type="primary" size="small"
+                                        @click="studentChart(scope.row)">历史成绩</el-button>
+                                    <el-button link type="primary" size="small"
+                                        @click="editExamScore(scope.row)">编辑</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-scrollbar>
                 </el-col>
                 <el-col :span="16" :offset="1">
                     <el-table :data="state.studentAnswer">
@@ -78,7 +81,7 @@
             </span>
         </template>
     </el-dialog>
-    <el-drawer v-model="drawer" title="历史成绩折线图" direction="btt" size="50%" :key="drawerKey">
+    <el-drawer v-model="drawer" title="历史成绩" direction="btt" size="50%" :key="drawerKey">
         <GradeHistory :scores="state.stuScores" />
     </el-drawer>
 </template>
