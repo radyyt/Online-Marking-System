@@ -25,6 +25,9 @@
                             <el-button type="info" size="default" @click="showExamDetail(item)"><el-icon>
                                     <View />
                                 </el-icon></el-button>
+                            <el-button type="info" size="default" @click="editExam(item)"><el-icon>
+                                    <EditPen />
+                                </el-icon></el-button>
                             <el-button type="info" size="default" @click="printExam(item)"><el-icon>
                                     <Printer />
                                 </el-icon></el-button>
@@ -98,6 +101,32 @@
                 </span>
             </template>
         </el-dialog>
+        <el-dialog v-model="editDialogVisible" title="修改分值" width="30%" align-center>
+            <div v-loading="loading">
+                <el-form>
+                    <el-form-item label="单选题分值">
+                        <el-input-number v-model="state.scoreForm.single" />
+                    </el-form-item>
+                    <el-form-item label="多选题分值">
+                        <el-input-number v-model="state.scoreForm.multiple" />
+                    </el-form-item>
+                    <el-form-item label="填空题分值">
+                        <el-input-number v-model="state.scoreForm.blank" />
+                    </el-form-item>
+                    <el-form-item label="主观题分值">
+                        <el-input-number v-model="state.scoreForm.subjective" />
+                    </el-form-item>
+                </el-form>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="editDialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="changeScore">
+                        确认
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -115,7 +144,7 @@ const state = reactive({
     formData: {
         title: '',
         subject: undefined,
-        desc: ''
+        desc: '',
     },
     randomForm: {
         subject: undefined,
@@ -124,7 +153,13 @@ const state = reactive({
         singleNum: 0,
         multipleNum: 0,
         blankNum: 0,
-        subjectiveNum: 0
+        subjectiveNum: 0,
+    },
+    scoreForm: {
+        single: 0,
+        multiple: 0,
+        blank: 0,
+        subjective: 0
     }
 })
 const subjects = store.state.subjects
@@ -244,6 +279,25 @@ const randomExam = () => {
         })
     })
 }
+
+// 修改试卷题目分值
+const editDialogVisible = ref(false)
+let url = ''
+const editExam = (item) => {
+    console.log(item);
+    url = item.url
+    editDialogVisible.value = true
+}
+
+const loading = ref(false)
+const changeScore = () => {
+    loading.value = true
+    axios.post(url + 'set-scores/', state.scoreForm, { baseURL: '', timeout: 30000 }).then(res => {
+        ElMessage({ message: '已修改分值', type: 'success' })
+        loading.value = false
+        editDialogVisible.value = false
+    })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -267,5 +321,9 @@ const randomExam = () => {
 
 .box-card {
     width: 400px;
+}
+
+body {
+    margin: 0;
 }
 </style>
