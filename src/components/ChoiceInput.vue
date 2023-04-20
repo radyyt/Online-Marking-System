@@ -143,7 +143,7 @@ const choiceFormSubmit = () => {
         if (valid) {
             console.log('choiceForm submit!')
             if (url != '') {
-                axios.put(url, formData
+                axios.patch(url, formData
                     , { headers: { 'Content-Type': 'multipart/form-data' }, baseURL: '' }).then(res => {
                         console.log(res)
                         emits('cancelDialog')
@@ -189,12 +189,13 @@ const handleQuestion = (q) => {
     form.choices_B = q.choices_B
     form.choices_C = q.choices_C
     form.choices_D = q.choices_D
-    form.answer.push(q.correct_answer)
+    form.answer = q.correct_answer.split(',')
+    // console.log(state.choiceForm.answer);
     form.subject = q.subject
     form.type = q.type
     state.questionUrl = q.url
 }
-console.log(props);
+
 if (props.question != undefined) {
     handleQuestion(props.question)
 }
