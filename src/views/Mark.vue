@@ -182,10 +182,12 @@ const nextQuestion = () => {
 const prevAnswer = () => {
     state.answers.currentIndex = state.answers.currentIndex - 1
     currentQuestion.value = state.answers.list[state.answers.currentIndex]
+    currentQuestion.value.full_score = state.questionId.list[state.questionId.currentIndex].score
 }
 const nextAnswer = () => {
     state.answers.currentIndex = state.answers.currentIndex + 1
     currentQuestion.value = state.answers.list[state.answers.currentIndex]
+    currentQuestion.value.full_score = state.questionId.list[state.questionId.currentIndex].score
 }
 
 //上传得分
