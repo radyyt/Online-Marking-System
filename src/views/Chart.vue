@@ -115,7 +115,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
     let url = res.data[0].url
     axios.get(url + 'score-rate/', { baseURL: '' }).then(res => {
         rates = JSON.parse(res.data)
-        console.log(rates);
+        // console.log(rates);
         let generalData = []
         let types = ['single', 'multiple', 'blank', 'subjective']
         for (let type of types) {
@@ -145,6 +145,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
                     type: 'bar',
                     data: generalData,
                     colorBy: 'data',
+                    barMaxWidth: '50px',
                     emphasis: {
                         itemStyle: {
                             shadowBlur: 10,
@@ -152,7 +153,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
                             shadowColor: 'rgba(0, 0, 0, 0.5)',
                         },
                     },
-                    barWidth: '20%'
+
                 }
             ]
         }
@@ -173,7 +174,7 @@ const showDetailChart = (params) => {
     } else {
         data = rates.subjective
     }
-    console.log(data);
+    const result = data.map(num => num.toFixed(2));
     let indexes = []
     for (let i = 0; i < data.length; i++) {
         indexes.push(i + 1)
@@ -199,8 +200,9 @@ const showDetailChart = (params) => {
             {
                 name: '得分率',
                 type: 'bar',
-                data: data,
+                data: result,
                 colorBy: 'data',
+                barMaxWidth: '30px',
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,

@@ -46,6 +46,7 @@ const gradeOption = ref({
             data: scores,
             type: 'bar',
             smooth: true,
+            barMaxWidth: '50px',
         }
     ]
 })
