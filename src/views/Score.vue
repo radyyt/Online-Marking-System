@@ -205,13 +205,13 @@ const handleCurrentChange = (currentRow) => {
     let examId = state.selectForm.examId
     axios.get('answer/', { params: { student: studentId, exam: examId } }).then(res => {
         state.studentAnswer = res.data
-        // console.log(state.studentAnswer);
     })
 }
 
 //跳转到成绩分析页面
 const router = useRouter()
 const gotoChart = () => {
+
     router.push({ name: 'chart', params: { class: state.selectForm.classId, exam: state.selectForm.examId } })
 }
 
@@ -224,6 +224,11 @@ const studentChart = (row) => {
     drawerKey.value++
     console.log(state.stuScores);
 }
+
+// 更新选择题得分
+axios.get('answer/update-score/').then(res => {
+    console.log(res.data);
+})
 </script>
 
 <style lang="scss" scoped></style>

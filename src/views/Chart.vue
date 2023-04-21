@@ -119,7 +119,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
         let generalData = []
         let types = ['single', 'multiple', 'blank', 'subjective']
         for (let type of types) {
-            generalData.push((rates[type].reduce((accumulator, currentValue) => accumulator + currentValue)) / rates[type].length)
+            generalData.push(((rates[type].reduce((accumulator, currentValue) => accumulator + currentValue)) / rates[type].length).toFixed(2))
         }
         console.log(generalData);
         generalOption.value = {
@@ -152,6 +152,7 @@ axios.get('class-exam/', { params: { exam: examId, classes: classId } }).then(re
                             shadowColor: 'rgba(0, 0, 0, 0.5)',
                         },
                     },
+                    barWidth: '20%'
                 }
             ]
         }
