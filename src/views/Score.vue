@@ -32,27 +32,27 @@
                 <el-button type="primary" size="default" @click="calcGrade">成绩计算</el-button>
             </el-col>
         </el-row>
-        <el-scrollbar max-height="80vh">
-            <el-row>
-                <el-col :span="7">
-                    <el-scrollbar max-height="80vh">
-                        <el-table :data="state.students" highlight-current-row @current-change="handleCurrentChange">
-                            <!-- <el-table-column type="index" /> -->
-                            <el-table-column prop="student_id" label="学号" />
-                            <el-table-column prop="name" label="姓名" />
-                            <el-table-column prop="current_score.score" label="得分" width="70" />
-                            <el-table-column fixed="right" label="操作" width="130" align="center">
-                                <template #default="scope">
-                                    <el-button link type="primary" size="small"
-                                        @click="studentChart(scope.row)">历史成绩</el-button>
-                                    <el-button link type="primary" size="small"
-                                        @click="editExamScore(scope.row)">编辑</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-scrollbar>
-                </el-col>
-                <el-col :span="16" :offset="1">
+
+        <el-row>
+            <el-col :span="6">
+                <el-scrollbar max-height="80vh">
+                    <el-table :data="state.students" highlight-current-row @current-change="handleCurrentChange">
+                        <!-- <el-table-column type="index" /> -->
+                        <el-table-column prop="student_id" label="学号" />
+                        <el-table-column prop="name" label="姓名" />
+                        <el-table-column prop="current_score.score" label="得分" width="70" />
+                        <el-table-column fixed="right" label="操作" width="130" align="center">
+                            <template #default="scope">
+                                <el-button link type="primary" size="small"
+                                    @click="studentChart(scope.row)">历史成绩</el-button>
+                                <el-button link type="primary" size="small" @click="editExamScore(scope.row)">编辑</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-scrollbar>
+            </el-col>
+            <el-col :span="15" :offset="2">
+                <el-scrollbar max-height="80vh">
                     <el-table :data="state.studentAnswer">
                         <!-- <el-table-column type="index" /> -->
                         <el-table-column prop="question_body" label="题目" />
@@ -66,9 +66,9 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </el-col>
-            </el-row>
-        </el-scrollbar>
+                </el-scrollbar>
+            </el-col>
+        </el-row>
     </div>
     <el-dialog v-model="dialogVisible" title="编辑分数" width="30%" align-center>
         <el-input-number v-model="score" :min="0" size="large" />
