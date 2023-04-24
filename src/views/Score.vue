@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="0">
-            <el-col :span="7" :offset="0">
+            <el-col :span="8" :offset="0">
                 <el-form :model="state.selectForm" ref="selectFormRef" :inline="true" size="default">
                     <el-form-item>
                         <el-select v-model="state.selectForm.classId" placeholder="请选择班级" clearable filterable
@@ -27,9 +27,9 @@
                     </el-form-item> -->
                 </el-form>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="7">
                 <el-button type="primary" size="default" @click="gotoChart">成绩分析</el-button>
-
+                <el-button type="primary" size="default" @click="calcGrade">成绩计算</el-button>
             </el-col>
         </el-row>
         <el-scrollbar max-height="80vh">
@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { inject, nextTick, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import axios from '../utils/axios';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
@@ -154,16 +154,17 @@ const editExamScore = (row) => {
 
 //编辑题目分数功能
 const editAnswerScore = (row) => {
-    console.log(row);
     dialogVisible.value = true
     score = row.score
     current = row
     current.flag = 1
 }
 
+// 编辑分数页面的提交按钮
 const submitBtn = () => {
     console.log(current);
     let url = current.url
+    // 当flag为0时，说明修改的是试卷分数，为1时则修改的是题目分数
     if (current.flag == 0) {
         //获取到当前学生的url和scores
         let scores = current.scores
@@ -229,6 +230,26 @@ const studentChart = (row) => {
 axios.get('answer/update-score/').then(res => {
     console.log(res.data);
 })
+
+// 计算试卷得分并更新
+const calcGrade = () => {
+    let examId = state.selectForm.examId
+    for (let stu of state.students) {
+        let grade = 0
+        let initValue = 0
+        axios.get('answer/', { params: { student: stu.id, exam: examId } }).then(res => {
+            let answers = res.data
+            grade = answers.reduce((acc, cur) => acc + cur.score, initValue)
+        }).then(() => {
+            let scores = stu.scores
+            let index = scores.findIndex(item => item.title == state.selectedExam.title)
+            scores[index].score = grade
+            axios.patch(stu.url, { scores: scores }, { baseURL: '' }).then(res => {
+                console.log(res.data);
+            })
+        })
+    }
+}
 </script>
 
 <style lang="scss" scoped></style>
